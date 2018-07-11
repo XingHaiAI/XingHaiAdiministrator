@@ -1,0 +1,263 @@
+<template>
+  <div id="mainBack" style="width:100%;min-width: 1000px;" >
+
+    <!--标签页-->
+    <div class="tabsInter"  style="float:left;width:100%;" >
+      <div class="animated fadeInDown" >
+      <div class="leftMenuInter"  style="float:left">
+        <label style="margin-left: 50px;font-size: 30px;">类型</label>
+        <ul>
+          <button class="leftItemInter" style="display: block" @click="userInterface" align="center" v-if="!btn1Clicked">用户情况</button>
+          <button class="leftItemInterClicked" style="display: block" @click="userInterface" align="center" v-if="btn1Clicked">用户情况</button>
+          <button class="leftItemInter" style="display: block" @click="interfaceAudit" align="center" v-if="!btn2Clicked">接口审核</button>
+          <button class="leftItemInterClicked" style="display: block" @click="interfaceAudit" align="center" v-if="btn2Clicked">接口审核</button>
+        </ul>
+      </div>
+      </div>
+      <div class="rightInter">
+        <!--用户情况-->
+        <div class="animated fadeInLeft" v-if="index===1">
+          <div class="interfaceBack"   align="left" v-if="index===1">
+            <el-form  ref="userForm" :model="userForm" style="margin-left: 7%;">
+              <el-form-item label="用户名">
+                <el-col :span="6">
+                  <el-input type="text" placeholder="请输入用户名" v-model="userForm.username" style="width: 100%;"></el-input>
+                </el-col>
+                <el-col class="line" :span="3"align="right"> &emsp;创建时间&emsp;</el-col>
+                <el-col :span="6">
+                  <el-date-picker type="date" placeholder="选择创建时间" v-model="userForm.createTime" style="width: 100%;"></el-date-picker>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="手机号">
+                <el-col :span="6">
+                  <el-input v-model="userForm.phone" placeholder="请输入手机号" class="inInter"></el-input>
+                </el-col>
+                <el-col :span="3" align="right">&emsp;邮箱 &emsp;
+                </el-col>
+                <el-col :span="6">
+                  <el-input  v-model="userForm.email" placeholder="请输入邮箱" class="inInter"></el-input>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="用户类型 ">
+                <el-col :span="6">
+                  <el-select v-model="userForm.usertype" placeholder="请选择反馈类型">
+                    <el-option label="" value="0"></el-option>
+                    <el-option label="" value="1"></el-option>
+                    <el-option label="" value="2"></el-option>
+                    <el-option label="" value="3"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="2">&emsp;
+                </el-col>
+                <el-col :span="1">
+                  <button class="filterInter"><label class="el-icon-search" style="color:white;font-size: 14px;"> 筛选</label></button>
+                </el-col>
+              </el-form-item>
+            </el-form>
+
+            <el-table :data="userTable" height="500px" :row-class-name="tableRowClassName"  class="intTable">
+              <el-table-column prop="username" label="用户名" width="180" align="center"></el-table-column>
+              <el-table-column prop="createUserTime" label="用户创建时间" width="180" align="center"></el-table-column>
+              <el-table-column prop="userType" label="用户类型" align="center"></el-table-column>
+              <el-table-column prop="interfaceNumbers" label="接口数量" width="180" align="center"></el-table-column>
+              <el-table-column label="操作" width="180" align="center">
+                <template slot-scope="scope">
+                  <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+
+          </div>
+        </div>
+        <!--接口审核-->
+        <div class="animated fadeInRight" v-if="index===2">
+          <div class="interfaceBack"   align="left" v-if="index===2">
+            <el-form  ref="interfaceForm" :model="interfaceForm"  style="margin-left: 7%;">
+              <el-form-item label="创建时间 ">
+                <el-col :span="5">
+                  <el-date-picker type="date" placeholder="选择开始日期" v-model="interfaceForm.createTimeStart" style="width: 100%;"></el-date-picker>
+                </el-col>
+                <el-col class="line" :span="2">&emsp;——</el-col>
+                <el-col :span="5">
+                  <el-date-picker type="date" placeholder="选择结束日期" v-model="interfaceForm.createTime" style="width: 100%;"></el-date-picker>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="用户名">
+                <el-col :span="5"><el-input v-model="interfaceForm.username" placeholder="请输入用户名" class="inInter">
+                </el-input></el-col>
+                <el-col :span="8">&emsp;
+                </el-col>
+              </el-form-item>
+              <el-form-item label="接口类型 ">
+                <el-col :span="6">
+                  <el-select v-model="interfaceForm.interfaceType" placeholder="请选择接口类型">
+                    <el-option label="" value="0"></el-option>
+                    <el-option label="" value="1"></el-option>
+                    <el-option label="" value="2"></el-option>
+                    <el-option label="" value="3"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="1">
+                  <button class="filterInter"><label class="el-icon-search" style="color:white;font-size: 14px;"> 筛选</label></button>
+                </el-col>
+              </el-form-item>
+            </el-form>
+
+            <el-table :data="interfaceTable" height="500px" :row-class-name="tableRowClassName"  class="intTable">
+              <el-table-column prop="username" label="用户名" width="140" align="center"></el-table-column>
+              <el-table-column prop="interfaceName" label="接口名称" width="140" align="center"></el-table-column>
+              <el-table-column prop="createUserTime" label="用户创建时间" width="180"align="center"></el-table-column>
+              <el-table-column prop="interfaceType" label="接口类型" width="180" align="center"></el-table-column>
+              <el-table-column label="操作" width="180" align="center">
+                <template slot-scope="scope">
+                  <el-button @click="showInterDetails(scope.row)" type="text" size="small">详情</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "Interface",
+      data () {
+        return {
+          index:0,     //菜单栏索引
+          userForm:{            //用户接口表单
+            createTime: '',
+            phone: '',
+            username: '',
+            usertype: '',
+            email:'',
+          },
+          interfaceForm:{       //接口审核表单
+            createTimeStart: '',
+            createTimeEen: '',
+            username: '',
+            interfaceType: '',
+          },
+          userTable:[{         //用户接口表格
+            id:'',
+            username:'',
+            createUserTime:'',
+            userType:'',
+            interfaceNumbers:'',
+          }],
+          interfaceTable:[{    //接口审核表格
+            id:'',
+            username:'',
+            interfaceName:'',
+            createUserTime:'',
+            interfaceType:'',
+          }],
+          btn1Clicked:false,   //按钮是否点击
+          btn2Clicked:false,
+        }
+      },
+      methods:{
+        userInterface(){
+          this.$data.index=1;
+          this.$data.btn1Clicked=true;
+          this.$data.btn2Clicked=false;
+        },
+        interfaceAudit(){
+          this.$data.index=2;
+          this.$data.btn1Clicked=false;
+          this.$data.btn2Clicked=true;
+        },
+        showInterDetails(rows){
+          this.$router.push({path:'InterfaceDetails',query:{id:rows.id}});
+        }
+      }
+    }
+</script>
+
+<style scoped>
+  .leftMenuInter{
+    padding-top:60px;
+    width:20.83%;
+    border:0px;
+    height:100%;
+  }
+  .leftItemInter{
+    width:100%;
+    border: 0;
+    outline: 0;
+    font-size: 17px;
+    margin-top: 45px;
+    background-color: transparent;
+    transition: all 0.5s;
+  }
+  .leftItemInter:hover{
+    width:100%;
+    font-size: 20px;
+    border-right:3px solid #409EFF;
+  }
+  .leftItemInterClicked{
+    background-color:transparent;
+    border: 0px;
+    font-size: 20px;
+    margin-top: 45px;
+    width:100%;
+    outline: 0;
+    transition: all 1s;
+    border-right:3px solid #409EFF;
+  }
+  .leftItemInterClicked:hover{
+    width:100%;
+    border-right:3px solid #409EFF;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+
+  }
+
+  .rightInter{
+    float:left;
+    width:79.17%;
+    box-shadow:1px 0 4px lightgray,
+    -1px 0 1px lightgray,
+    0px 0 4px lightgray,
+    0px 0 1px lightgray;
+    min-height: 700px;
+    background-color: #FCFCFC;
+  }
+
+  .interfaceBack{
+    background-image: url("../assets/背景底纹.png");
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    padding-top: 5.5%;
+    width:100%;
+    height:800px;
+    min-width: 900px;
+  }
+  .filterInter{
+    margin-left: 2px;
+    border:0;
+    outline: 0;
+    border-radius: 8px;
+    background-color: #0080ED;
+    width:80px;
+    height:40px;
+  }
+  .intTable{
+    margin-left: 7%;
+    border-radius: 6px;
+    border:1px solid lightgray;
+    width:88%;
+    height:45.84%;
+    background-color: transparent;
+  }
+  .el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+</style>
