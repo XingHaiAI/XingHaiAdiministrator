@@ -35,10 +35,10 @@
       </el-form>
 
       <el-table :data="fbResults" height="500px" :row-class-name="tableRowClassName"  class="fbTable">
-        <el-table-column prop="username" label="用户名" width="180" align="center"></el-table-column>
-        <el-table-column prop="fbTime" label="反馈时间" width="180" align="center"></el-table-column>
-        <el-table-column prop="replyStatus" label="回复情况" align="center"></el-table-column>
-        <el-table-column prop="fbType" label="反馈类型" width="180" align="center"></el-table-column>
+        <el-table-column prop="name" label="用户名" width="180" align="center"></el-table-column>
+        <el-table-column prop="time" label="反馈时间" width="180" align="center"></el-table-column>
+        <el-table-column prop="status" label="回复情况" align="center"></el-table-column>
+        <el-table-column prop="type" label="反馈类型" width="180" align="center"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
@@ -60,43 +60,61 @@
               replyStatus:'',
               reedBackType:'',
             },
-            fbResults:[{
-              id:'',
-              username:'我',
-              fbTime:'2018-1-1',
-              replyStatus:'',
-              fbType:'',
-            },
-              {
-                id:'',
-                username:'我',
-                fbTime:'2018-1-1',
-                replyStatus:'',
-                fbType:'',
-              },
-              {
-                id:'',
-                username:'我',
-                fbTime:'2018-1-1',
-                replyStatus:'',
-                fbType:'',
-              },
+            fbResults:[
+              // {
+            //   id:'',
+            //   name:'',
+            //   phone:'',
+            //   type:'',
+            //   question:'',
+            //   time:'',
+            //   status:'',
+            //   questionid:'',
+            //   email:'',
+            //   company:''
+            // }
             ],
             pageNumber:'',
           }
       },
       created(){
-          let _this=this;
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'/question/get',
+          params:{
+            type:'1'
+          }
+        }).then(function (response) {
+          // _this.$data.fbResults.splice(0,this.$data.fbResults.length);
 
-          this.$axios({
-            method:'get',
-            url:'/question/get',
-            params:{
-              type:'4'
-            }
-          }).then(function (response) {
-            _this.$data.fbResults=response.data;
-          })
+          for(let index=0;index<response.data.length;index++){
+            _this.$data.fbResults.push(response.data[index]);
+          }
+          console.log(_this.$data.fbResults);
+        })
+        this.$axios({
+          method:'get',
+          url:'/question/get',
+          params:{
+            type:'2'
+          }
+        }).then(function (response) {
+          for(let index=0;index<response.data.length;index++){
+            _this.$data.fbResults.push(response.data[index]);
+          }
+        })
+        this.$axios({
+          method:'get',
+          url:'/question/get',
+          params:{
+            type:'3'
+          }
+        }).then(function (response) {
+         for(let index=0;index<response.data.length;index++){
+            _this.$data.fbResults.push(response.data[index]);
+          }
+        })
       },
       methods: {
         tableRowClassName({row, rowIndex}) {
@@ -108,7 +126,7 @@
           return '';
         },
         handleClick(row){
-          this.$router.push({path:'/FeedDetails',query:{id:row.id}})
+          this.$router.push({path:'/FeedBackDetails',query:{id:row.questionid}})
         }
       },
     }
