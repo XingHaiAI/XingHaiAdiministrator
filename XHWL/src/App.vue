@@ -36,7 +36,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <button type="primary" class="logBtn" @click="verify">
+          <button type="primary" class="logBtn" @click="adminLogin">
             登 陆 <i class="eell-icon-jiantouyou"/>
           </button>
         </div>
@@ -66,6 +66,27 @@ export default {
     }
   },
   methods:{
+    adminLogin(){
+      let _this=this;
+      this.$axios({
+        method:'get',
+        url:'/adm/login',
+        params:{
+          account:this.$data.user.username,
+          password:this.$data.user.password
+        }
+      }).then(function (response) {
+        if(response.data===true){
+          alert('登录成功！')
+          _this.$data.checked=false;
+          _this.$router.push({path:'/'});
+        }else{
+          alert('登录失败！')
+        }
+      }).catch(function (error) {
+        alert('登录失败！')
+      })
+    },
     toFeedBack(){
       this.$router.push('/FeedBackForm');
     },
