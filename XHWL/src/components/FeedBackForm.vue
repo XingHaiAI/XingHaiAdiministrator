@@ -95,38 +95,39 @@
           method:'get',
           url:'/question/get',
           params:{
-            type:'1',
+            type:'4',
+            page:'1'
           }
         }).then(function (response) {
           // _this.$data.fbResults.splice(0,this.$data.fbResults.length);
+          _this.$data.fbResults=response.data;
+          // for(let index=0;index<response.data.length;index++){
+          //   _this.$data.fbResults.push(response.data[index]);
+          // }
 
-          for(let index=0;index<response.data.length;index++){
-            _this.$data.fbResults.push(response.data[index]);
-          }
-          console.log(_this.$data.fbResults);
         })
-        this.$axios({
-          method:'get',
-          url:'/question/get',
-          params:{
-            type:'2',
-          }
-        }).then(function (response) {
-          for(let index=0;index<response.data.length;index++){
-            _this.$data.fbResults.push(response.data[index]);
-          }
-        })
-        this.$axios({
-          method:'get',
-          url:'/question/get',
-          params:{
-            type:'3'
-          }
-        }).then(function (response) {
-         for(let index=0;index<response.data.length;index++){
-            _this.$data.fbResults.push(response.data[index]);
-          }
-        })
+        // this.$axios({
+        //   method:'get',
+        //   url:'/question/get',
+        //   params:{
+        //     type:'2',
+        //   }
+        // }).then(function (response) {
+        //   for(let index=0;index<response.data.length;index++){
+        //     _this.$data.fbResults.push(response.data[index]);
+        //   }
+        // })
+        // this.$axios({
+        //   method:'get',
+        //   url:'/question/get',
+        //   params:{
+        //     type:'3'
+        //   }
+        // }).then(function (response) {
+        //  for(let index=0;index<response.data.length;index++){
+        //     _this.$data.fbResults.push(response.data[index]);
+        //   }
+        // })
       },
       methods: {
         tableRowClassName({row, rowIndex}) {
