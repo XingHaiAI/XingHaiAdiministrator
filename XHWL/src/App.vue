@@ -77,7 +77,6 @@ export default {
         }
       }).then(function (response) {
         if(response.data===true){
-          alert('登录成功！')
           _this.$data.checked=false;
           _this.$router.push({path:'/'});
         }else{

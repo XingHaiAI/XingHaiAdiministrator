@@ -5,12 +5,16 @@ import FeedBack from '@/components/FeedBackForm'
 import Interface from '@/components/Interface'
 import FeedDetails from '../components/FeedBackDetails'
 import InterfaceDetails from '../components/InterfaceDetails'
-
+import UserDetails from '../components/UserDetails'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path:'/UserDetails',
+      component:UserDetails
+    },
     {
       path: '/',
       name: 'HelloWorld',

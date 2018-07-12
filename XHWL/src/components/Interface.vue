@@ -16,8 +16,8 @@
       </div>
       <div class="rightInter">
         <!--用户情况-->
-        <div class="animated fadeInRight" v-if="index===1">
-          <div class="interfaceBack"   align="left" v-if="index===1">
+        <div class="animated fadeInRight" v-if="index===1" key="2">
+          <div class="interfaceBack1"   align="left" v-if="index===1">
             <el-form  ref="userForm" :model="userForm" style="margin-left: 7%;">
               <el-form-item label="用户名">
                 <el-col :span="6">
@@ -54,14 +54,14 @@
                 </el-col>
               </el-form-item>
             </el-form>
-            <el-table :data="userTable" height="500px" :row-class-name="tableRowClassName"  class="intTable">
+            <el-table :data="userTable" height="500px" class="intTable1">
               <el-table-column prop="account" label="用户名" width="180" align="center"></el-table-column>
               <el-table-column prop="time" label="用户创建时间" width="180" align="center"></el-table-column>
               <el-table-column prop="email" label="用户邮箱" align="center"></el-table-column>
               <el-table-column prop="num" label="接口数量" width="180" align="center"></el-table-column>
               <el-table-column label="操作" width="180" align="center">
                 <template slot-scope="scope">
-                  <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+                  <el-button @click="GotoUser(scope.row)" type="text" size="small">详情</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -69,7 +69,7 @@
           </div>
         </div>
         <!--接口审核-->
-        <div class="animated fadeInRight" v-if="index===2">
+        <div class="animated fadeInRight" v-if="index===2" key="1">
           <div class="interfaceBack"   align="left" v-if="index===2">
             <el-form  ref="interfaceForm" :model="interfaceForm"  style="margin-left: 7%;">
               <el-form-item label="创建时间 ">
@@ -102,14 +102,22 @@
               </el-form-item>
             </el-form>
 
-            <el-table :data="interfaceTable" height="500px" :row-class-name="tableRowClassName"  class="intTable">
-              <el-table-column prop="account" label="用户名" width="140" align="center"></el-table-column>
-              <el-table-column prop="email" label="邮箱" width="140" align="center"></el-table-column>
-              <el-table-column prop="time" label="用户创建时间" width="180" align="center"></el-table-column>
-              <el-table-column prop="num" label="接口数量" width="180" align="center"></el-table-column>
-              <el-table-column label="操作" width="180" align="center">
+            <el-table :data="interfaceTable" height="500px"  class="intTable">
+              <el-table-column prop="account" label="用户名" width="180" align="center"></el-table-column>
+              <el-table-column prop="apikey" label="APIKEY" width="185" align="center"></el-table-column>
+              <el-table-column prop="name" label="名称" width="230" align="center"></el-table-column>
+              <el-table-column prop="status" label="状态" width="230" align="center">
                 <template slot-scope="scope">
-                  <el-button @click="showInterDetails(scope.row)" type="text" size="small">详情</el-button>
+                  <div v-if="scope.row.status===1">未审核</div>
+                  <div v-else-if="scope.row.status===2"  style="color: yellowgreen">已通过</div>
+                  <div v-else="scope.row.status===3"  style="color: darkred;font-weight: bold">已回绝</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="230" align="center">
+                <template slot-scope="scope">
+                  <el-button @click="showInterDetails(scope.row)" type="primary"  size="small">详情</el-button>
+                  <el-button @click="rejectAPI(scope.row)" type="danger" size="small" v-if="scope.row.status===1" key="1">拒绝</el-button>
+                  <el-button @click="passAPI(scope.row)" type="success" size="small" v-if="scope.row.status===1" key="2">通过</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -146,18 +154,60 @@
             num:0,
             time:'',
           }],
+          page4interface:1,
+          total4interface:0,
           interfaceTable:[{    //接口审核表格
-            id:'',
-            username:'',
-            interfaceName:'',
-            createUserTime:'',
-            interfaceType:'',
+            account:'',
+            apikey:'',
+            name:'',
+            status:'',
           }],
           btn1Clicked:false,   //按钮是否点击
           btn2Clicked:false,
         }
       },
       methods:{
+        rejectAPI(row){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/adm/refuseApi',
+            params:{
+              apikey:row.apikey
+            }
+          }).then(function (response) {
+            if(response.data===true){
+              alert('回绝成功！');
+              row.status=3;
+            }else{
+              alert('回绝失败')
+            }
+          }).catch(function (error) {
+            alert('回绝失败！')
+          })
+        },
+        passAPI(row){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/adm/acceptAPi',
+            params:{
+              apikey:row.apikey
+            }
+          }).then(function (response) {
+            if(response.data===true){
+              alert('操作成功！')
+              row.status=3;
+            }else{
+              alert('操作失败！')
+            }
+          }).catch(function (error) {
+            alert('操作失败')
+          })
+        },
+        GotoUser(row){
+          this.$router.push({path:'/UserDetails',query:{id:row.account}});
+        },
         userInterface(){
           this.$data.index=1;
           this.$data.btn1Clicked=true;
@@ -185,6 +235,19 @@
           }).then(function (response) {
             _this.$data.userTable=response.data.accounts
           })
+
+          this.$axios({
+            method:'get',
+            url:'/adm/getApiStatus',
+            params:{
+              status:4,
+              page:1
+            }
+          }).then(function (response) {
+            _this.$data.interfaceTable=response.data.apis;
+
+          })
+
       }
     }
 </script>
@@ -248,6 +311,15 @@
     height:800px;
     min-width: 900px;
   }
+  .interfaceBack1{
+    background-image: url("../assets/背景底纹.png");
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    padding-top: 5.5%;
+    width:100%;
+    height:800px;
+    min-width: 900px;
+  }
   .filterInter{
     margin-left: 2px;
     border:0;
@@ -258,6 +330,14 @@
     height:40px;
   }
   .intTable{
+    margin-left: 7%;
+    border-radius: 6px;
+    border:1px solid lightgray;
+    width:88%;
+    height:45.84%;
+    background-color: transparent;
+  }
+  .intTable1{
     margin-left: 7%;
     border-radius: 6px;
     border:1px solid lightgray;
