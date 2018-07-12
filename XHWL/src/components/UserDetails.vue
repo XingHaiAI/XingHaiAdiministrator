@@ -44,7 +44,7 @@
           <template slot-scope="scope">
             <span v-if="scope.row.status===1">未审核</span>
             <span v-if="scope.row.status===2" style="color:darkred;font-weight: bold">已回绝</span>
-            <span v-if="scope.row.status===3" style="color: greenyellow;font-weight: bold">已通过</span>
+            <span v-if="scope.row.status===3" style="color: cornflowerblue;font-weight: bold">已通过</span>
           </template>
         </el-table-column>
         <el-table-column prop="apipassword" label="APIPassword" width="140" align="center"></el-table-column>
@@ -92,6 +92,9 @@
           }
       },
       methods:{
+          handleClick(row){
+            this.$router.push({path:'/InterfaceDetails',query:{id:row.apikey}});
+          },
           backTo(){
             this.$router.push({path:'/Interface'})
           },

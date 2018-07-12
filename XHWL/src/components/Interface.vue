@@ -109,8 +109,8 @@
               <el-table-column prop="status" label="状态" width="230" align="center">
                 <template slot-scope="scope">
                   <div v-if="scope.row.status===1">未审核</div>
-                  <div v-else-if="scope.row.status===2"  style="color: yellowgreen">已通过</div>
-                  <div v-else="scope.row.status===3"  style="color: darkred;font-weight: bold">已回绝</div>
+                  <div v-else-if="scope.row.status===3"  style="color: yellowgreen">已通过</div>
+                  <div v-else="scope.row.status===2"  style="color: darkred;font-weight: bold">已回绝</div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="230" align="center">
@@ -134,7 +134,7 @@
         name: "Interface",
       data () {
         return {
-          index:0,     //菜单栏索引
+          index:1,     //菜单栏索引
           userForm:{            //用户接口表单
             createTime: '',
             phone: '',
@@ -219,7 +219,7 @@
           this.$data.btn2Clicked=true;
         },
         showInterDetails(rows){
-          this.$router.push({path:'InterfaceDetails',query:{id:rows.id}});
+          this.$router.push({path:'InterfaceDetails',query:{id:rows.apikey}});
         }
       },
       created(){
