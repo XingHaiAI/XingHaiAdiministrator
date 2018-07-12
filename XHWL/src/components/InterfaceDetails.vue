@@ -1,7 +1,7 @@
 <template>
   <!--接口审核详情-->
-    <div class="interDeBack">
-      <el-form ref="interDetailsForm" :model="interDetailsForm" label-width="80px" class="interForm">
+    <div class="interDeBack" >
+      <el-form ref="interDetailsForm" :model="interDetailsForm" label-width="80px" class="interForm" style="margin-top: 30px;margin-left: auto;margin-right: auto;">
        <!--应用名称和类型-->
         <el-form-item label="应用名称" class="item">
           <el-col :span="6">

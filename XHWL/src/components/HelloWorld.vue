@@ -24,24 +24,24 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog :visible.sync="dialogVisible1" :lock-scroll="true" :modal="true" :modal-append-to-body="false" title="新建公告">
+    <el-dialog :visible.sync="dialogVisible1" :lock-scroll="true" :modal="true" :modal-append-to-body="false" title="修改公告">
       <el-form :model="formModify" ref="formModify" :rules="rulesModify">
         <el-form-item prop="logTitle" label="博客标题:">
-          <el-input v-model="formModify.logtitle"></el-input>
+          <el-input v-model="formModify.logtitle" disabled></el-input>
         </el-form-item>
         <el-form-item prop="logType" label="博客类型">
-          <el-radio v-model="formModify.logtype" label="1">产品更新</el-radio>
-          <el-radio v-model="formModify.logtype" label="2">服务公告</el-radio>
-          <el-radio v-model="formModify.logtype" label="3">优惠服务</el-radio>
+          <el-radio v-model="formModify.logtype" label="1" disabled>产品更新</el-radio>
+          <el-radio v-model="formModify.logtype" label="2" disabled>服务公告</el-radio>
+          <el-radio v-model="formModify.logtype" label="3" disabled>优惠服务</el-radio>
         </el-form-item>
         <el-form-item prop="brief" label="博客简介">
-          <el-input v-model="formModify.brief"></el-input>
+          <el-input v-model="formModify.brief" disabled></el-input>
         </el-form-item>
         <el-form-item prop="logContent" label="博客内容">
           <el-input type="textarea" :rows="10" v-model="formModify.logcontent"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="ReleaseNewNotice">修改</el-button>
+          <el-button @click="ReleaseModify">修改</el-button>
           <el-button @click="CancelNewNotice">取消</el-button>
         </el-form-item>
       </el-form>
@@ -332,6 +332,7 @@
        * 修改博客内容
        */
       modifyBlog(item){
+        let _this=this;
         this.$data.formModify.logtype=item.logtype;
         this.$data.formModify.brief=item.brief;
         this.$data.formModify.logcontent=item.logContent;
@@ -350,8 +351,42 @@
         this.$data.dialogVisible1=true;
       },
 
-      deleteBlog(item){
+      ReleaseModify(){
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'/blog/change',
+          params:{
+            newLogContent:this.$data.formModify.logcontent,
+            LogID:this.$data.formModify.logid
+          }
+        }).then(function (response) {
+          if(response.data===true){
+            alert('修改成功！')
+            _this.$data.dialogVisible1=false;
+          }else{
+            alert('修改失败')
+          }
+        }).catch(function (err) {
+          alert('修改失败');
+        })
+      },
 
+      deleteBlog(item){
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'/blog/delete',
+          params:{
+            Logid:item.logid
+          }
+        }).then(function (response) {
+          if(response.data===true){
+            alert('删除成功！');
+          }else{
+
+          }
+        })
       },
 
       /**

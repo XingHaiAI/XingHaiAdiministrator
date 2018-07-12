@@ -16,7 +16,7 @@
       </div>
       <div class="rightInter">
         <!--用户情况-->
-        <div class="animated fadeInLeft" v-if="index===1">
+        <div class="animated fadeInRight" v-if="index===1">
           <div class="interfaceBack"   align="left" v-if="index===1">
             <el-form  ref="userForm" :model="userForm" style="margin-left: 7%;">
               <el-form-item label="用户名">
@@ -54,12 +54,11 @@
                 </el-col>
               </el-form-item>
             </el-form>
-
             <el-table :data="userTable" height="500px" :row-class-name="tableRowClassName"  class="intTable">
-              <el-table-column prop="username" label="用户名" width="180" align="center"></el-table-column>
-              <el-table-column prop="createUserTime" label="用户创建时间" width="180" align="center"></el-table-column>
-              <el-table-column prop="userType" label="用户类型" align="center"></el-table-column>
-              <el-table-column prop="interfaceNumbers" label="接口数量" width="180" align="center"></el-table-column>
+              <el-table-column prop="account" label="用户名" width="180" align="center"></el-table-column>
+              <el-table-column prop="time" label="用户创建时间" width="180" align="center"></el-table-column>
+              <el-table-column prop="email" label="用户邮箱" align="center"></el-table-column>
+              <el-table-column prop="num" label="接口数量" width="180" align="center"></el-table-column>
               <el-table-column label="操作" width="180" align="center">
                 <template slot-scope="scope">
                   <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
@@ -104,10 +103,10 @@
             </el-form>
 
             <el-table :data="interfaceTable" height="500px" :row-class-name="tableRowClassName"  class="intTable">
-              <el-table-column prop="username" label="用户名" width="140" align="center"></el-table-column>
-              <el-table-column prop="interfaceName" label="接口名称" width="140" align="center"></el-table-column>
-              <el-table-column prop="createUserTime" label="用户创建时间" width="180"align="center"></el-table-column>
-              <el-table-column prop="interfaceType" label="接口类型" width="180" align="center"></el-table-column>
+              <el-table-column prop="account" label="用户名" width="140" align="center"></el-table-column>
+              <el-table-column prop="email" label="邮箱" width="140" align="center"></el-table-column>
+              <el-table-column prop="time" label="用户创建时间" width="180" align="center"></el-table-column>
+              <el-table-column prop="num" label="接口数量" width="180" align="center"></el-table-column>
               <el-table-column label="操作" width="180" align="center">
                 <template slot-scope="scope">
                   <el-button @click="showInterDetails(scope.row)" type="text" size="small">详情</el-button>
@@ -142,11 +141,10 @@
             interfaceType: '',
           },
           userTable:[{         //用户接口表格
-            id:'',
-            username:'',
-            createUserTime:'',
-            userType:'',
-            interfaceNumbers:'',
+            account:'',
+            email:'',
+            num:0,
+            time:'',
           }],
           interfaceTable:[{    //接口审核表格
             id:'',
@@ -173,6 +171,20 @@
         showInterDetails(rows){
           this.$router.push({path:'InterfaceDetails',query:{id:rows.id}});
         }
+      },
+      created(){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/adm/getAccountList',
+            params:{
+              page:'1',
+              first:'2000-01-01',
+              second:'2020-01-01'
+            }
+          }).then(function (response) {
+            _this.$data.userTable=response.data.accounts
+          })
       }
     }
 </script>

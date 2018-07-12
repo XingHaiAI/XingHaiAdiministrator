@@ -45,6 +45,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="pageDiv" style="width: 100%">
+        <div class="block" style="width: 300px;margin-left: 200px;">
+          <el-pagination
+            :current-page="page"
+            @current-change="handleChange"
+            layout="prev, pager, next"
+            :total="total">
+          </el-pagination>
+        </div>
+      </div>
       </div>
   </div>
 </template>
@@ -60,6 +70,8 @@
               replyStatus:'',
               reedBackType:'',
             },
+            total:0,
+            page:1,
             fbResults:[
               // {
             //   id:'',
@@ -83,7 +95,7 @@
           method:'get',
           url:'/question/get',
           params:{
-            type:'1'
+            type:'1',
           }
         }).then(function (response) {
           // _this.$data.fbResults.splice(0,this.$data.fbResults.length);
@@ -97,7 +109,7 @@
           method:'get',
           url:'/question/get',
           params:{
-            type:'2'
+            type:'2',
           }
         }).then(function (response) {
           for(let index=0;index<response.data.length;index++){
@@ -127,6 +139,52 @@
         },
         handleClick(row){
           this.$router.push({path:'/FeedBackDetails',query:{id:row.questionid}})
+        },
+        handleChange(){
+          let total1=0;
+          let total2=0;
+          let total3=0;
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/question/get',
+            params:{
+              type:'1'
+            }
+          }).then(function (response) {
+            // _this.$data.fbResults.splice(0,this.$data.fbResults.length);
+            total1=response.data.all;
+            for(let index=0;index<response.data.length;index++){
+              _this.$data.fbResults.push(response.data[index]);
+            }
+            console.log(_this.$data.fbResults);
+          })
+          this.$axios({
+            method:'get',
+            url:'/question/get',
+            params:{
+              type:'2'
+            }
+          }).then(function (response) {
+            total2=response.data.all;
+            for(let index=0;index<response.data.length;index++){
+              _this.$data.fbResults.push(response.data[index]);
+            }
+          })
+          this.$axios({
+            method:'get',
+            url:'/question/get',
+            params:{
+              type:'3'
+            }
+          }).then(function (response) {
+            total3=response.data.all
+            for(let index=0;index<response.data.length;index++){
+              _this.$data.fbResults.push(response.data[index]);
+            }
+          })
+
+          this.$data.total=total1+total2+total3;
         }
       },
     }
