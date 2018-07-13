@@ -122,6 +122,10 @@
             id:'',
             name:'',
             status:1,
+            desc:'',
+            platform:[
+
+            ],
             interDetailsForm:{
               appName:'',
               appType:'',
@@ -153,6 +157,8 @@
           _this.$data.check=response.data.apitype;
           _this.$data.name=response.data.name;
           _this.$data.status=response.data.status;
+          _this.$data.platform=response.data.platform;
+          _this.$data.desc=response.data.descirbe;
           for(let index=0;index<_this.$data.check;index++){
             switch (_this.$data.check[index]){
               case 1:
@@ -220,9 +226,31 @@
                 break;
 
             }
-
-
-
+          }
+          for(let index=0;index<_this.$data.platform.length;index++){
+            switch(_this.$data.platform[index]){
+              case 1:
+                _this.$data.platform[index]='ANDROID';
+                break;
+              case 2:
+                _this.$data.platform[index]='IOS';
+                break;
+              case 3:
+                _this.$data.platform[index]='WINDOWS';
+                break;
+              case 4:
+                _this.$data.platform[index]='HTML5';
+                break;
+              case 5:
+                _this.$data.platform[index]='JAVA';
+                break;
+              case 6:
+                _this.$data.platform[index]='FLASH';
+                break;
+              case 7:
+                _this.$data.platform[index]='LINUX';
+                break;
+            }
           }
 
 

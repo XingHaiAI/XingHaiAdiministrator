@@ -152,12 +152,12 @@
           ],
           page4interface:1,
           total4interface:0,
-          interfaceTable:[{    //接口审核表格
-            account:'',
-            apikey:'',
-            name:'',
-            status:'',
-          }],
+          interfaceTable:[],//[{    //接口审核表格
+            // account:'',
+            // apikey:'',
+            // name:'',
+            // status:'',
+          //}],
           btn1Clicked:false,   //按钮是否点击
           btn2Clicked:false,
         }
