@@ -73,13 +73,13 @@
               email:'',
               time:''
             },
-            InterfaceTable:[{
-              apikey:'',
+            InterfaceTable:[],   //[{
+           /*   apikey:'',
               apipassword:'',
               apitype:'',
               name:'',
               status:''
-            }],
+            }],*/
             userTable:[{         //用户接口表格
               account:'',
               email:'',

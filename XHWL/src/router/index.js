@@ -6,6 +6,8 @@ import Interface from '@/components/Interface'
 import FeedDetails from '../components/FeedBackDetails'
 import InterfaceDetails from '../components/InterfaceDetails'
 import UserDetails from '../components/UserDetails'
+import Redirect from '../components/Dedirect'
+
 
 Vue.use(Router)
 
@@ -36,6 +38,10 @@ export default new Router({
     {
       path:'/InterfaceDetails',
       component:InterfaceDetails
+    },
+    {
+      path:'/redirect',
+      component:Redirect
     }
   ]
 })

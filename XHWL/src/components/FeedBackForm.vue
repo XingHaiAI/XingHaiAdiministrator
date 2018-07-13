@@ -34,11 +34,23 @@
         </el-form-item>
       </el-form>
 
-      <el-table :data="fbResults" height="500px" :row-class-name="tableRowClassName"  class="fbTable">
+      <el-table :data="fbResults"   class="fbTable">
         <el-table-column prop="name" label="用户名" width="180" align="center"></el-table-column>
         <el-table-column prop="time" label="反馈时间" width="180" align="center"></el-table-column>
-        <el-table-column prop="status" label="回复情况" align="center"></el-table-column>
-        <el-table-column prop="type" label="反馈类型" width="180" align="center"></el-table-column>
+        <el-table-column prop="status" label="回复情况" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status===1">未读</span>
+            <span v-if="scope.row.status===2">已读</span>
+            <span v-if="scope.row.status===3">已回复</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="type" label="反馈类型" width="180" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type===1">售前咨询</span>
+            <span v-if="scope.row.type===2">商务咨询</span>
+            <span v-if="scope.row.type===3">问题反馈</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
@@ -46,13 +58,14 @@
         </el-table-column>
       </el-table>
       <div class="pageDiv" style="width: 100%">
-        <div class="block" style="width: 300px;margin-left: 200px;">
-          <el-pagination
-            :current-page="page"
-            @current-change="handleChange"
-            layout="prev, pager, next"
-            :total="total">
-          </el-pagination>
+        <div class="block" style="width: 300px;height:50px;margin-left: 200px;">
+          <!--<el-pagination-->
+            <!--:current-page.sync="page"-->
+            <!--:page-size="5"-->
+            <!--@current-change="handleChange"-->
+            <!--layout="prev, pager, next"-->
+            <!--:total="total">-->
+          <!--</el-pagination>-->
         </div>
       </div>
       </div>
@@ -93,41 +106,43 @@
         let _this=this;
         this.$axios({
           method:'get',
-          url:'/question/get',
+          url:'/adm/getQuestion',
           params:{
             type:'4',
-            page:'1'
+            page:1,
+            firstTime:'2000-01-01',
+            secondTime:'2020-01-01'
           }
         }).then(function (response) {
           // _this.$data.fbResults.splice(0,this.$data.fbResults.length);
-          _this.$data.fbResults=response.data;
-          // for(let index=0;index<response.data.length;index++){
-          //   _this.$data.fbResults.push(response.data[index]);
-          // }
+          // _this.$data.fbResults=response.data;
+          for(let index=0;index<response.data.questions.length;index++){
+            _this.$data.fbResults.push(response.data.questions[index]);
+          }
 
         })
-        this.$axios({
-          method:'get',
-          url:'/question/get',
-          params:{
-            type:'2',
-          }
-        }).then(function (response) {
-          for(let index=0;index<response.data.length;index++){
-            _this.$data.fbResults.push(response.data[index]);
-          }
-        })
-        this.$axios({
-          method:'get',
-          url:'/question/get',
-          params:{
-            type:'3'
-          }
-        }).then(function (response) {
-         for(let index=0;index<response.data.length;index++){
-            _this.$data.fbResults.push(response.data[index]);
-          }
-        })
+        // this.$axios({
+        //   method:'get',
+        //   url:'/question/get',
+        //   params:{
+        //     type:'2',
+        //   }
+        // }).then(function (response) {
+        //   for(let index=0;index<response.data.length;index++){
+        //     _this.$data.fbResults.push(response.data[index]);
+        //   }
+        // })
+        // this.$axios({
+        //   method:'get',
+        //   url:'/question/get',
+        //   params:{
+        //     type:'3'
+        //   }
+        // }).then(function (response) {
+        //  for(let index=0;index<response.data.length;index++){
+        //     _this.$data.fbResults.push(response.data[index]);
+        //   }
+        // })
       },
       methods: {
         tableRowClassName({row, rowIndex}) {
@@ -198,7 +213,7 @@
     background-repeat: no-repeat;
     padding-top: 5.5%;
     width:100%;
-    height:600px;
+    /*height:600px;*/
     min-width: 1100px;
  }
   .filter{
@@ -214,7 +229,7 @@
     border-radius: 6px;
     border:1px solid lightgray;
     width:78.98%;
-    height:45.84%;
+    /*height:45.84%;*/
     margin-left: 10.41%;
     background-color: transparent;
   }

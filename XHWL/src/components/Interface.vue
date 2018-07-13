@@ -148,12 +148,8 @@
             username: '',
             interfaceType: '',
           },
-          userTable:[{         //用户接口表格
-            account:'',
-            email:'',
-            num:0,
-            time:'',
-          }],
+          userTable:[         //用户接口表格
+          ],
           page4interface:1,
           total4interface:0,
           interfaceTable:[{    //接口审核表格

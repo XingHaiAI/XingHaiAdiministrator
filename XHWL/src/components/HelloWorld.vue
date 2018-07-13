@@ -58,7 +58,7 @@
       </div>
       <div class="right">
         <el-button type="primary" style="margin-left: 30px;margin-top: 30px;" @click="dialogVisible=true" plain size="small"><label><i class=" el-icon-plus"/>创建公告</label></el-button>
-        <div class="animated fadeInRight" v-if="index===1">
+        <div class="animated fadeInRight" v-if="index===1" key="1">
           <div v-if="total4All===0" style="text-align: center;width: 300px;margin-left: auto;margin-right: auto">暂无信息~</div>
       <div class="rightSortTab" v-if="index===1">
         <!--公告-->
@@ -91,9 +91,9 @@
         <div class="pageDiv">
           <div class="block">
             <el-pagination
-              :current-page="page4All"
               @current-change="blogAllChange"
-              layout="prev, pager, next"
+              :current-page.sync="page4All"
+              :page-size="5"
               :total="total4All">
             </el-pagination>
           </div>
@@ -125,15 +125,16 @@
               <div style="position: relative;margin-bottom:5%;margin-top: 2%;" >
                 <div style="height: 20px"></div>
                 <el-button type="text"   @click="modifyBlog(item)"  style="font-size: 15px;float: right;margin-left: 6px;color: gray"><img src="../assets/edit.png"/>编辑</el-button>
-                <el-button type="text"   @click="modifyBlog(item)" style="font-size: 15px;float: right;color: gray"><img src="../assets/delete.png"/>删除</el-button>
+                <el-button type="text"   @click="deleteBlog(item)" style="font-size: 15px;float: right;color: gray"><img src="../assets/delete.png"/>删除</el-button>
                 <el-button type="text"   @click="item.ashow=!item.ashow" style="font-size: 15px;float: left">{{item.ashow?'收起详情':'查看详情'}}</el-button>
               </div>
             </el-card>
             <div class="pageDiv">
               <div class="block">
                 <el-pagination
-                  :current-page="page4Update"
+                  :current-page.sync="page4Update"
                   @current-change="blogUpdateChange"
+                  :page-size="5"
                   layout="prev, pager, next"
                   :total="total4Update">
                 </el-pagination>
@@ -173,8 +174,9 @@
             <div class="pageDiv">
               <div class="block">
                 <el-pagination
-                  :current-page="page4Service"
+                  :current-page.sync="page4Service"
                   @current-change="blogServiceChange"
+                  :page-size="5"
                   layout="prev, pager, next"
                   :total="total4Service">
                 </el-pagination>
@@ -214,8 +216,9 @@
             <div class="pageDiv">
               <div class="block">
                 <el-pagination
-                  :current-page="page4Discount"
+                  :current-page.sync="page4Discount"
                   @current-change="blogDiscountChange"
+                  :page-size="5"
                   layout="prev, pager, next"
                   :total="total4Discount">
                 </el-pagination>
@@ -237,7 +240,7 @@
       return {
         dialogVisible:false,
         dialogVisible1:false,
-        index:0,     //菜单栏索引
+        index:1,     //菜单栏索引
 
         rulesNewNotice:{
 
@@ -283,7 +286,7 @@
         }
         ],
         total4Update:0,
-        page4Update:0,
+        page4Update:1,
         blogUpdate:[{
           logid:null,
           logtitle:'语音视频的API更新',
@@ -294,7 +297,7 @@
           time:'2015-01-15'
         }],
         total4Service:0,
-        page4Service:0,
+        page4Service:1,
         blogService:[
           {
             logid:null,
@@ -307,7 +310,7 @@
           },
         ],
         total4Discount:0,
-        page4Discount:0,
+        page4Discount:1,
         blogDiscount:[
           {
             logid:null,
@@ -335,7 +338,7 @@
         let _this=this;
         this.$data.formModify.logtype=item.logtype;
         this.$data.formModify.brief=item.brief;
-        this.$data.formModify.logcontent=item.logContent;
+        this.$data.formModify.logcontent=item.logcontent;
         this.$data.formModify.logid=item.logid;
         this.$data.formModify.logtitle=item.logtitle;
         this.$data.formModify.time=item.time
@@ -364,6 +367,7 @@
           if(response.data===true){
             alert('修改成功！')
             _this.$data.dialogVisible1=false;
+            _this.$router.push('/Redirect');
           }else{
             alert('修改失败')
           }
@@ -383,8 +387,17 @@
         }).then(function (response) {
           if(response.data===true){
             alert('删除成功！');
+            _this.$router.push('/Redirect');
+            _this.$data.total4All--;
+            _this.$data.total4Update--;
+            _this.$data.total4Service--;
+            _this.$data.total4Discount--;
+            _this.$data.page4All=1;
+            _this.$data.page4Update=1;
+            _this.$data.page4Service=1
+            _this.$data.page4Discount=1;
           }else{
-
+            alert('删除失败！');
           }
         })
       },
@@ -427,13 +440,15 @@
               params:this.$data.formNewNotice
             }).then(function (response) {
               if(response.data===true){
+
                 _this.$data.formNewNotice.logContent='';
                 _this.$data.formNewNotice.logType='1';
                 _this.$data.formNewNotice.logTitle='';
                 _this.$data.formNewNotice.time='';
                 _this.$data.formNewNotice.brief='';
                 _this.$data.dialogVisible=false;
-                alert('发布成功！')
+                _this.$router.push('/Redirect');
+                alert('发布成功！');
               }else {
                 alert('!');
               }
@@ -455,11 +470,6 @@
       },
       showSale(){
         this.$data.index=4;
-      },
-      createNewNotice(){
-        this.$data.noticeNumbers+=1;
-        this.$data.visibleNewNotice=true;
-        //this.$data.notices.push({title:'12',date:'12',content:'12'});
       },
       blogAllChange(){
         let _this=this;
@@ -540,7 +550,7 @@
           }
           _this.$data.blogDiscount=response.data.logcontents
           _this.$data.total4Discount=response.data.all;
-          _this.$data.page4Discount=response.data.part;
+          //_this.$data.page4Discount=response.data.part;
         })
       }
     },
@@ -554,8 +564,8 @@
         method:'get',
         url:'/blog/get',
         params:{
-          page:'1',
-          type:'4'
+          page:1,
+          type:4
         }
       }).then(function (response) {
         for(let index=0;index<response.data.logcontents.length;index++){
@@ -569,8 +579,9 @@
           }
         }
         _this.$data.blogAll=response.data.logcontents;
-        _this.$data.page4All=response.data.part;
+        _this.$data.page4All=1;
         _this.$data.total4All=response.data.all;
+        // alert(_this.$data.total4All);
       })
 
 
@@ -582,7 +593,7 @@
         url:'/blog/get',
         params:{
           type:'1',
-          page:'1'
+          page:1
         }
       }).then(function (response) {
         for(let index=0;index<response.data.logcontents.length;index++){
@@ -591,7 +602,7 @@
         }
         _this.$data.blogUpdate=response.data.logcontents
         _this.$data.total4Update=response.data.all;
-        _this.$data.page4Update=response.data.part;
+        _this.$data.page4Update=1;
       })
 
 
@@ -603,7 +614,7 @@
         url:'/blog/get',
         params:{
           type:'2',
-          page:'1'
+          page:1
         }
       }).then(function (response) {
         for(let index=0;index<response.data.logcontents.length;index++){
@@ -612,7 +623,7 @@
         }
         _this.$data.blogService=response.data.logcontents
         _this.$data.total4Service=response.data.all;
-        _this.$data.page4Service=response.data.part;
+        _this.$data.page4Service=1;
       })
 
 
@@ -624,7 +635,7 @@
         url:'/blog/get',
         params:{
           type:'3',
-          page:'1'
+          page:1
         }
       }).then(function (response) {
         for(let index=0;index<response.data.logcontents.length;index++){
@@ -633,7 +644,7 @@
         }
         _this.$data.blogDiscount=response.data.logcontents
         _this.$data.total4Discount=response.data.all;
-        _this.$data.page4Discount=response.data.part;
+        _this.$data.page4Discount=1;
       })
 
     }

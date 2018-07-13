@@ -1,7 +1,7 @@
 <template>
    <div id="FeedBackDetails">
      <div class="Feed_header">
-     <el-button type="text" style="font-size: 25px;margin-left: 50px;" icon="el-icon-back">反馈查看</el-button>
+     <el-button type="text" style="font-size: 25px;margin-left: 50px;" icon="el-icon-back" @click="backTo">反馈查看</el-button>
      </div>
      <div class="feed_title" style="margin-right: auto;margin-left: auto;text-align: center">
        <span style="font-size: 28px;">反馈详情</span>
@@ -104,6 +104,9 @@
             }).catch(function (error) {
               alert('删除失败');
             })
+        },
+        backTo(){
+            this.$router.push('/FeedBackForm')
         }
       },
       created(){
