@@ -2,7 +2,7 @@
   <div id="app">
     <!--导航栏-->
     <div id="head" style="float: left">
-      <img src="./assets/LOGO白.png"  height="20" style="float:left;margin-top: 10px;margin-left: 5px;">
+      <img src="./assets/LOGO.png"  height="30" style="float:left;margin-top: 10px;margin-left: -15px;">
       <ul class="headBar">
         <li @click="toFeedBack">反馈查看</li>
         <li @click="toInterface">调用接口查看</li>
@@ -176,11 +176,12 @@ export default {
     float:left;
     list-style-type: none;
     margin: 0;
-    margin-left: 450px;
+    margin-top: 5px;
+    margin-left: 750px;
   }
   li {
     padding: 10px 18px;
-    font-size: 14px;
+    font-size: 16px;
     color: white;
     float: left;
     transition: all 0.5s;
@@ -192,7 +193,7 @@ export default {
   #head{
     width:100%;
     min-width: 1100px;
-    height:40px;
+    height:50px;
     background-color: black;
     position: fixed;
     top:0;
