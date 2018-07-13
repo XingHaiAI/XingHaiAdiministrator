@@ -7,6 +7,7 @@
         <li @click="toFeedBack">反馈查看</li>
         <li @click="toInterface">调用接口查看</li>
         <li @click="backToHome">博客更新</li>
+        <li @click="logout">注销</li>
       </ul>
       <ul style="margin-left: 66px;" class="headBar">
         <li title="返回首页" @click="backToHome">{{admin}}</li>
@@ -36,9 +37,9 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <button type="primary" class="logBtn" @click="adminLogin">
+          <el-button type="primary" @click="adminLogin">
             登 陆 <i class="eell-icon-jiantouyou"/>
-          </button>
+          </el-button>
         </div>
       </el-dialog>
     </div>
@@ -67,6 +68,18 @@ export default {
     }
   },
   methods:{
+    logout(){
+      var keys=document.cookie.match(/[^ =;]+(?=\=)/g);
+      if (keys)
+      {
+        for (var i = keys.length; i--;)
+        {
+          document.cookie=keys[i]+'=0;expires=' + new Date( 0).toUTCString();
+        }
+      }
+      this.$data.isLogin=false;
+
+    },
     adminLogin(){
       let _this=this;
       this.$axios({
@@ -78,6 +91,7 @@ export default {
         }
       }).then(function (response) {
         if(response.data===true){
+          _this.$data.isLogin=true;
           _this.$data.checked=false;
           _this.$router.push({path:'/'});
           document.cookie='account='+_this.$data.user.username;
@@ -117,10 +131,10 @@ export default {
     },
 
   },created(){
-    const token=document.cookie.split(';');
+    let token=document.cookie.split(';');
 
-      const username = token[0].split('=');
-      const password = token[1].split('=');
+      let username = token[0].split('=');
+      let password = token[1].split('=');
       console.log(token)
       let _this = this;
       this.$axios({
