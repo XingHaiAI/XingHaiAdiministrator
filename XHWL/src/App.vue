@@ -21,7 +21,7 @@
       <button id="userButton">用户界面</button>
     </div>
     <!--登陆框-->
-    <div class="log">
+    <div class="log" v-if="isLogin===false">
       <el-dialog :visible.sync="checked" width="400px" title="管理员登陆" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
         <el-form :model="user"  ref="user" label-width="100px" class="demo-ruleForm" >
           <el-form-item label="用户名" prop="username" :label-width="labelWidth">
@@ -52,6 +52,7 @@ export default {
   name: 'App',
   data(){
     return {
+      isLogin:false,
       admin: '',
       user: {
       username: '',
@@ -79,6 +80,8 @@ export default {
         if(response.data===true){
           _this.$data.checked=false;
           _this.$router.push({path:'/'});
+          document.cookie='account='+_this.$data.user.username;
+          document.cookie='password='+_this.$data.user.password;
         }else{
           alert('登录失败！')
         }
@@ -111,8 +114,41 @@ export default {
         this.$data.checked=false;
       var text = document.getElementById("na").value;//获得输入框的文本值
       this.$data.admin=text;
+    },
+
+  },created(){
+    const token=document.cookie.split(';');
+
+      const username = token[0].split('=');
+      const password = token[1].split('=');
+      console.log(token)
+      let _this = this;
+      this.$axios({
+        method: 'get',
+        url: '/adm/login',
+        params: {
+          account: username[1],
+          password: password[1]
+        }
+      }).then(function (response) {
+        if (response.data === true) {
+          _this.$message({
+            type: 'success',
+            message: '欢迎回来！管理员'
+          })
+          _this.$data.isLogin = true;
+        } else {
+          _this.$data.isLogin = false;
+          document.cookie = '';
+          _this.$message({
+            type: 'error',
+            message: '登录信息已过期！请重新登录'
+          })
+        }
+      })
     }
-  }
+
+
 }
 </script>
 
