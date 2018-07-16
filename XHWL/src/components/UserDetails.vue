@@ -10,22 +10,8 @@
           <el-col :span="6">
             <el-input type="text" disabled v-model="userInfo.account" style="width: 100%;"></el-input>
           </el-col>
-          <el-col class="line" :span="3"align="right"> &emsp;创建时间&emsp;</el-col>
-          <el-col :span="6">
-           <el-input type="text" disabled v-model="userInfo.account" style="width: 100%;"></el-input>
-          </el-col>
         </el-form-item>
-        <el-form-item label="用户类型">
-          <el-col :span="6">
-            <el-select v-model="userInfo.usertype" disabled >
-              <el-option label="" value="0"></el-option>
-              <el-option label="" value="1"></el-option>
-              <el-option label="" value="2"></el-option>
-              <el-option label="" value="3"></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="3" align="right">&emsp;邮箱 &emsp;
-          </el-col>
+        <el-form-item label="邮箱">
           <el-col :span="6">
             <el-input  v-model="userInfo.email" disabled  class="inInter"></el-input>
           </el-col>
@@ -36,8 +22,8 @@
         <el-table-column prop="apikey" label="APIKEY" width="180" align="center"></el-table-column>
         <el-table-column prop="apitype" label="类型" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.apitype===1">免费</span>
-            <span v-if="scope.row.apitype===2">付费</span>
+            <span >免费</span>
+
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" width="140" align="center">
@@ -127,13 +113,11 @@
             }
           }).then(function (response) {
             if(response.data===true){
-              alert('回绝成功！');
+              alert('操作成功！');
               row.status=3;
             }else{
-              alert('回绝失败')
+              alert('操作失败')
             }
-          }).catch(function (err) {
-            alert('回绝失败')
           })
         }
       },

@@ -19,47 +19,21 @@
         <div class="animated fadeInRight" v-if="index===1" key="2">
           <div class="interfaceBack1"   align="left" v-if="index===1">
             <el-form  ref="userForm" :model="userForm" style="margin-left: 7%;">
-              <el-form-item label="用户名">
-                <el-col :span="6">
-                  <el-input type="text" placeholder="请输入用户名" v-model="userForm.username" style="width: 100%;"></el-input>
+              <el-form-item label="创建时间 ">
+                <el-col :span="5">
+                  <el-date-picker type="date" placeholder="选择开始日期" v-model="interfaceForm.createTimeStart" style="width: 100%;"></el-date-picker>
                 </el-col>
-                <el-col class="line" :span="3"align="right"> &emsp;创建时间&emsp;</el-col>
-                <el-col :span="6">
-                  <el-date-picker type="date" placeholder="选择创建时间" v-model="userForm.createTime" style="width: 100%;"></el-date-picker>
-                </el-col>
-              </el-form-item>
-              <el-form-item label="手机号">
-                <el-col :span="6">
-                  <el-input v-model="userForm.phone" placeholder="请输入手机号" class="inInter"></el-input>
-                </el-col>
-                <el-col :span="3" align="right">&emsp;邮箱 &emsp;
-                </el-col>
-                <el-col :span="6">
-                  <el-input  v-model="userForm.email" placeholder="请输入邮箱" class="inInter"></el-input>
-                </el-col>
-              </el-form-item>
-              <el-form-item label="用户类型 ">
-                <el-col :span="6">
-                  <el-select v-model="userForm.usertype" placeholder="请选择反馈类型">
-                    <el-option label="" value="0"></el-option>
-                    <el-option label="" value="1"></el-option>
-                    <el-option label="" value="2"></el-option>
-                    <el-option label="" value="3"></el-option>
-                  </el-select>
-                </el-col>
-                <el-col :span="2">&emsp;
-                </el-col>
-                <el-col :span="1">
-                  <button class="filterInter"><label class="el-icon-search" style="color:white;font-size: 14px;"> 筛选</label></button>
+                <el-col class="line" :span="2">&emsp;——</el-col>
+                <el-col :span="5">
+                  <el-date-picker type="date" placeholder="选择结束日期" v-model="interfaceForm.createTime" style="width: 100%;"></el-date-picker>
                 </el-col>
               </el-form-item>
             </el-form>
             <el-table :data="userTable" height="500px" class="intTable1">
-              <el-table-column prop="account" label="用户名" width="180" align="center"></el-table-column>
-              <el-table-column prop="time" label="用户创建时间" width="180" align="center"></el-table-column>
+              <el-table-column prop="account" label="用户名" width="200" align="center"></el-table-column>
+              <el-table-column prop="time" label="用户创建时间" width="240" align="center"></el-table-column>
               <el-table-column prop="email" label="用户邮箱" align="center"></el-table-column>
-              <el-table-column prop="num" label="接口数量" width="180" align="center"></el-table-column>
-              <el-table-column label="操作" width="180" align="center">
+              <el-table-column label="操作" width="230" align="center">
                 <template slot-scope="scope">
                   <el-button @click="GotoUser(scope.row)" type="text" size="small">详情</el-button>
                 </template>
@@ -81,25 +55,6 @@
                   <el-date-picker type="date" placeholder="选择结束日期" v-model="interfaceForm.createTime" style="width: 100%;"></el-date-picker>
                 </el-col>
               </el-form-item>
-              <el-form-item label="用户名">
-                <el-col :span="5"><el-input v-model="interfaceForm.username" placeholder="请输入用户名" class="inInter">
-                </el-input></el-col>
-                <el-col :span="8">&emsp;
-                </el-col>
-              </el-form-item>
-              <el-form-item label="接口类型 ">
-                <el-col :span="6">
-                  <el-select v-model="interfaceForm.interfaceType" placeholder="请选择接口类型">
-                    <el-option label="" value="0"></el-option>
-                    <el-option label="" value="1"></el-option>
-                    <el-option label="" value="2"></el-option>
-                    <el-option label="" value="3"></el-option>
-                  </el-select>
-                </el-col>
-                <el-col :span="1">
-                  <button class="filterInter"><label class="el-icon-search" style="color:white;font-size: 14px;"> 筛选</label></button>
-                </el-col>
-              </el-form-item>
             </el-form>
 
             <el-table :data="interfaceTable" height="500px"  class="intTable">
@@ -116,8 +71,8 @@
               <el-table-column label="操作" width="230" align="center">
                 <template slot-scope="scope">
                   <el-button @click="showInterDetails(scope.row)" type="primary"  size="small">详情</el-button>
-                  <el-button @click="rejectAPI(scope.row)" type="danger" size="small" v-if="scope.row.status===1" key="1">拒绝</el-button>
-                  <el-button @click="passAPI(scope.row)" type="success" size="small" v-if="scope.row.status===1" key="2">通过</el-button>
+                  <el-button @click="rejectAPI(scope.row)" type="danger" size="small" v-if="scope.row.status===1" key="2221">回绝</el-button>
+                  <el-button @click="passAPI(scope.row)" type="success" size="small" v-if="scope.row.status===1" key="2848">通过</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -173,13 +128,11 @@
             }
           }).then(function (response) {
             if(response.data===true){
-              alert('回绝成功！');
-              row.status=3;
+              alert('操作成功！');
+              row.status=2;
             }else{
-              alert('回绝失败')
+              alert('操作失败')
             }
-          }).catch(function (error) {
-            alert('回绝失败！')
           })
         },
         passAPI(row){

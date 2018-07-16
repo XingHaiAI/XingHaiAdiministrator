@@ -2,39 +2,19 @@
   <div class="animated fadeInLeft" v-if="true" style="width:100%;">
     <div id="fbBack"   align="left" v-if="true">
       <el-form  ref="form" :model="form" style="margin-left: 10.41%;">
-        <el-form-item label="反馈时间 ">
-          <el-col :span="5">
-            <el-date-picker type="date" placeholder="选择开始日期" v-model="form.startDate" style="width: 100%;"></el-date-picker>
-          </el-col>
-          <el-col class="line" :span="2">&emsp;——</el-col>
-          <el-col :span="5">
-            <el-date-picker type="date" placeholder="选择结束日期" v-model="form.endDate" style="width: 100%;"></el-date-picker>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="回复情况 ">
-          <el-select v-model="form.replyStatus" placeholder="请选择回复情况" class="in">
-            <el-option label="全部" value="0"></el-option>
-            <el-option label="未读" value="1"></el-option>
-            <el-option label="已读" value="2"></el-option>
-            <el-option label="已回复" value="3"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="反馈类型 ">
           <el-col :span="6">
-            <el-select v-model="form.reedBackType" placeholder="请选择反馈类型">
-              <el-option label="全部" value="0"></el-option>
+            <el-select v-model="form.reedBackType"  placeholder="请选择反馈类型"  @change="changeContents">
+              <el-option label="全部" value="4"></el-option>
               <el-option label="售前咨询" value="1"></el-option>
               <el-option label="问题反馈" value="2"></el-option>
               <el-option label="商务咨询" value="3"></el-option>
             </el-select>
           </el-col>
-          <el-col :span="1">
-            <button class="filter"><label class="el-icon-search" style="color:white;font-size: 14px;"> 筛选</label></button>
-          </el-col>
         </el-form-item>
       </el-form>
 
-      <el-table :data="fbResults"   class="fbTable">
+      <el-table :data="fbResults"   class="fbTable" style="width: 65%">
         <el-table-column prop="name" label="用户名" width="180" align="center"></el-table-column>
         <el-table-column prop="time" label="反馈时间" width="180" align="center"></el-table-column>
         <el-table-column prop="status" label="回复情况" align="center">
@@ -47,8 +27,8 @@
         <el-table-column prop="type" label="反馈类型" width="180" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.type===1">售前咨询</span>
-            <span v-if="scope.row.type===2">商务咨询</span>
-            <span v-if="scope.row.type===3">问题反馈</span>
+            <span v-if="scope.row.type===2">问题反馈</span>
+            <span v-if="scope.row.type===3">商务咨询</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180" align="center">
@@ -145,6 +125,22 @@
         // })
       },
       methods: {
+          changeContents(){
+            let _this=this;
+            this.$axios({
+              method:'get',
+              url:'/adm/getQuestion',
+              params:{
+                type:this.$data.form.reedBackType,
+                page:1,
+                firstTime:'2000-01-01',
+                secondTime:'2020-01-01'
+              }
+            }).then(function (response) {
+              _this.$data.fbResults=response.data.questions;
+            })
+
+          },
         tableRowClassName({row, rowIndex}) {
           if (rowIndex === 1) {
             return 'warning-row';

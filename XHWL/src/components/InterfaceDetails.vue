@@ -69,7 +69,7 @@
         </el-form-item>
         <!--应用平台*********************************************-->
         <el-form-item label="应用平台" label-width="200px;" class="item">
-          <el-checkbox-group v-model="interDetailsForm.appPlatform" disabled>
+          <el-checkbox-group v-model="platform" disabled>
             <el-checkbox label="ANDROID"></el-checkbox>
             <el-checkbox label="IOS"></el-checkbox>
             <el-checkbox label="WINDOWS"></el-checkbox>
@@ -82,30 +82,7 @@
         <!--应用描述*********************************************-->
         <el-form-item label="应用描述" label-width="200px;" class="item">
           <el-col :span="6">
-            <el-input type="textarea" v-model="interDetailsForm.description" style="outline: 0;background-color: transparent;width:700px;" disabled></el-input>
-          </el-col>
-        </el-form-item>
-        <!--接口类型-->
-        <el-form-item label="接口类型" label-width="200px;" class="item">
-          <el-col :span="6">
-            <el-input  style="outline: 0;background-color: transparent;width:250px;" disabled></el-input>
-          </el-col>
-          <el-col :span="2">&emsp;</el-col>
-          <el-col :span="2">
-            <el-button  type="primary" size="medium">复制</el-button>
-          </el-col>
-        </el-form-item>
-        <!--处理按钮-->
-        <el-form-item>
-          <el-col :span="4">&emsp;
-          </el-col>
-          <el-col :span="6">
-            <el-button type="primary" size="small" plain>审核通过</el-button>
-          </el-col>
-          <el-col :span="2">&emsp;
-          </el-col>
-          <el-col :span="1">
-            <el-button type="danger" size="small" plain>审核不通过</el-button>
+            <el-input type="textarea" v-model="desc" style="outline: 0;background-color: transparent;width:700px;" disabled></el-input>
           </el-col>
         </el-form-item>
       </el-form>

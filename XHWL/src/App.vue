@@ -2,7 +2,7 @@
   <div id="app">
     <!--导航栏-->
     <div id="head" style="float: left">
-      <img src="./assets/LOGO白.png"  height="20" style="float:left;margin-top: 10px;margin-left: 5px;">
+      <img src="./assets/LOGO.png"  height="30" style="float:left;margin-top: 10px;margin-left: -15px;">
       <ul class="headBar">
         <li @click="toFeedBack">反馈查看</li>
         <li @click="toInterface">调用接口查看</li>
@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item label="密码" prop="password" :label-width="labelWidth" >
             <input class="logIn" id="pw" v-model="user.password" placeholder="请输入密码" type="password" @blur="checkPass"><br/>
-           <span> <span v-if="warnPass" style="font-size: 10px;color: red;">*密码错误</span>
+            <span> <span v-if="warnPass" style="font-size: 10px;color: red;">*密码错误</span>
              <span v-if="!warnPass&clickPass"class="el-icon-check" style="color:green"></span>&emsp;</span>
           </el-form-item>
         </el-form>
@@ -49,121 +49,123 @@
 </template>
 
 <script>
-export default {
-  name: 'App',
-  data(){
-    return {
-      isLogin:false,
-      admin: '',
-      user: {
-      username: '',
-      password: '',
-      },
-      checked:true,
-      labelWidth:'100px',
-      warnName:false,
-      warnPass:false,
-      clickName:false,
-      clickPass:false,
-    }
-  },
-  methods:{
-    logout(){
-      var keys=document.cookie.match(/[^ =;]+(?=\=)/g);
-      if (keys)
-      {
-        for (var i = keys.length; i--;)
-        {
-          document.cookie=keys[i]+'=0;expires=' + new Date( 0).toUTCString();
-        }
+  export default {
+    name: 'App',
+    data(){
+      return {
+        isLogin:false,
+        admin: '',
+        user: {
+          username: '',
+          password: '',
+        },
+        checked:true,
+        labelWidth:'100px',
+        warnName:false,
+        warnPass:false,
+        clickName:false,
+        clickPass:false,
       }
-      this.$data.isLogin=false;
-
     },
-    adminLogin(){
-      let _this=this;
-      this.$axios({
-        method:'get',
-        url:'/adm/login',
-        params:{
-          account:this.$data.user.username,
-          password:this.$data.user.password
+    methods:{
+      logout(){
+        var keys=document.cookie.match(/[^ =;]+(?=\=)/g);
+        if (keys)
+        {
+          for (var i = keys.length; i--;)
+          {
+            document.cookie=keys[i]+'=0;expires=' + new Date( 0).toUTCString();
+          }
         }
-      }).then(function (response) {
-        if(response.data===true){
-          _this.$data.isLogin=true;
-          _this.$data.checked=false;
-          _this.$router.push({path:'/'});
-          document.cookie='account='+_this.$data.user.username;
-          document.cookie='password='+_this.$data.user.password;
-        }else{
+        this.$data.isLogin=false;
+
+      },
+      adminLogin(){
+        let _this=this;
+        this.$axios({
+          method:'get',
+          url:'/adm/login',
+          params:{
+            account:this.$data.user.username,
+            password:this.$data.user.password
+          }
+        }).then(function (response) {
+          if(response.data===true){
+            _this.$data.isLogin=true;
+            _this.$data.checked=false;
+            _this.$router.push({path:'/'});
+            document.cookie='account='+_this.$data.user.username;
+            document.cookie='password='+_this.$data.user.password;
+          }else{
+            alert('登录失败！')
+          }
+        }).catch(function (error) {
           alert('登录失败！')
-        }
-      }).catch(function (error) {
-        alert('登录失败！')
-      })
-    },
-    toFeedBack(){
-      this.$router.push('/FeedBackForm');
-    },
-    toInterface(){
-      this.$router.push('/Interface');
-    },
-    backToHome(){
-      this.$router.push("/");
-    },
-    checkName() {                   //姓名验证
-      var text = document.getElementById("na").value;//获得输入框的文本值
-      this.$data.warnName=false;
-      this.$data.clickName=true;
-    },
-    checkPass(){                 //密码验证
-      var text = document.getElementById("pw").value;//获得输入框的文本值
-      this.$data.warnPass=false;
-      this.$data.clickPass=true;
-      i
-    },
-    verify(){
-      if(this.$data.warnName===false&&this.$data.warnPass===false)
-        this.$data.checked=false;
-      var text = document.getElementById("na").value;//获得输入框的文本值
-      this.$data.admin=text;
-    },
+        })
+      },
+      toFeedBack(){
+        this.$router.push('/FeedBackForm');
+      },
+      toInterface(){
+        this.$router.push('/Interface');
+      },
+      backToHome(){
+        this.$router.push("/");
+      },
+      checkName() {                   //姓名验证
+        var text = document.getElementById("na").value;//获得输入框的文本值
+        this.$data.warnName=false;
+        this.$data.clickName=true;
+      },
+      checkPass(){                 //密码验证
+        var text = document.getElementById("pw").value;//获得输入框的文本值
+        this.$data.warnPass=false;
+        this.$data.clickPass=true;
+        i
+      },
+      verify(){
+        if(this.$data.warnName===false&&this.$data.warnPass===false)
+          this.$data.checked=false;
+        var text = document.getElementById("na").value;//获得输入框的文本值
+        this.$data.admin=text;
+      },
 
-  },created(){
-    let token=document.cookie.split(';');
+    },created(){
 
-      let username = token[0].split('=');
-      let password = token[1].split('=');
-      console.log(token)
-      let _this = this;
-      this.$axios({
-        method: 'get',
-        url: '/adm/login',
-        params: {
-          account: username[1],
-          password: password[1]
-        }
-      }).then(function (response) {
-        if (response.data === true) {
-          _this.$message({
-            type: 'success',
-            message: '欢迎回来！管理员'
-          })
-          _this.$data.isLogin = true;
-        } else {
-          _this.$data.isLogin = false;
-          document.cookie = '';
-          _this.$message({
-            type: 'error',
-            message: '登录信息已过期！请重新登录'
-          })
-        }
-      })
+      let token=document.cookie.split(';');
+      if(token) {
+        let username = token[0].split('=');
+        let password = token[1].split('=');
+        console.log(token)
+        let _this = this;
+        this.$axios({
+          method: 'get',
+          url: '/adm/login',
+          params: {
+            account: username[1],
+            password: password[1]
+          }
+        }).then(function (response) {
+          if (response.data === true) {
+            _this.$message({
+              type: 'success',
+              message: '欢迎回来！管理员'
+            })
+            _this.$data.isLogin = true;
+          } else {
+            _this.$data.isLogin = false;
+            document.cookie = '';
+            _this.$message({
+              type: 'error',
+              message: '登录信息已过期！请重新登录'
+            })
+          }
+        })
+      }
     }
 
 
-}
+  }
 </script>
 
 <style>
@@ -176,23 +178,24 @@ export default {
     float:left;
     list-style-type: none;
     margin: 0;
-    margin-left: 450px;
+    margin-top: 5px;
+    margin-left: 750px;
   }
   li {
     padding: 10px 18px;
-    font-size: 14px;
+    font-size: 16px;
     color: white;
     float: left;
     transition: all 0.5s;
   }
   /*li:hover{*/
-    /*color: #409EFF;*/
-    /*font-size: 15px;*/
+  /*color: #409EFF;*/
+  /*font-size: 15px;*/
   /*}*/
   #head{
     width:100%;
     min-width: 1100px;
-    height:40px;
+    height:50px;
     background-color: black;
     position: fixed;
     top:0;
