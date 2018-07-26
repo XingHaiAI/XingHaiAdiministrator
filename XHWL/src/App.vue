@@ -187,6 +187,7 @@
     color: white;
     float: left;
     transition: all 0.5s;
+    cursor:pointer;
   }
   /*li:hover{*/
   /*color: #409EFF;*/
