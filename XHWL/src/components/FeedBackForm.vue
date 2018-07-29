@@ -39,13 +39,13 @@
       </el-table>
       <div class="pageDiv" style="width: 100%">
         <div class="block" style="width: 300px;height:50px;margin-left: 200px;">
-          <!--<el-pagination-->
-            <!--:current-page.sync="page"-->
-            <!--:page-size="5"-->
-            <!--@current-change="handleChange"-->
-            <!--layout="prev, pager, next"-->
-            <!--:total="total">-->
-          <!--</el-pagination>-->
+          <el-pagination
+            :current-page.sync="page"
+            :page-size="5"
+            @current-change="handleChange"
+            layout="prev, pager, next"
+            :total="total">
+          </el-pagination>
         </div>
       </div>
       </div>
@@ -63,7 +63,7 @@
               replyStatus:'',
               reedBackType:'',
             },
-            total:0,
+            total:1,
             page:1,
             fbResults:[
               // {
@@ -99,6 +99,7 @@
           for(let index=0;index<response.data.questions.length;index++){
             _this.$data.fbResults.push(response.data.questions[index]);
           }
+          _this.$data.total=response.data.all;
 
         })
         // this.$axios({
@@ -125,6 +126,7 @@
         // })
       },
       methods: {
+
           changeContents(){
             let _this=this;
             this.$axios({

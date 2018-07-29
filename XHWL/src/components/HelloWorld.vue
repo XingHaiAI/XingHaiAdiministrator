@@ -2,8 +2,8 @@
   <div class="animated fadeIn">
   <div id="mainBack" style="width:100%;min-width: 1000px;" >
     <!--标签页-->
-    <el-dialog :visible.sync="dialogVisible" :lock-scroll="true" :modal="true" :modal-append-to-body="false" title="新建公告">
-      <el-form :model="formNewNotice" ref="formNewNotice" :rules="rulesNewNotice">
+    <el-dialog :visible.sync="dialogVisible" :lock-scroll="true" :modal="true"  :modal-append-to-body="false" title="新建公告">
+      <el-form :model="formNewNotice" ref="formNewNotice" :rules="rulesNewNotice" :status-icon="true">
         <el-form-item prop="logTitle" label="博客标题:">
           <el-input v-model="formNewNotice.logTitle"></el-input>
         </el-form-item>
@@ -243,9 +243,32 @@
         index:1,     //菜单栏索引
 
         rulesNewNotice:{
-
+          logTitle:[
+            {required:true,message:'请输入标题',trigger:'change'}
+          ],
+          logContent:[
+            {required:true,message:'请输入内容',trigger:'change'},
+          ],
+          logType:[
+            {required:true,message:'请选择类型',trigger:'change'}
+          ],
+          brief:[
+            {required:true,message:'请输入博客简介',trigger:'change'}
+          ]
         },
         rulesModify:{
+          logTitle:[
+            {required:true,message:'请输入标题',trigger:'change'}
+          ],
+          logContent:[
+            {required:true,message:'请输入内容',trigger:'change'},
+          ],
+          logType:[
+            {required:true,message:'请选择类型',trigger:'change'}
+          ],
+          brief:[
+            {required:true,message:'请输入博客简介',trigger:'change'}
+          ]
 
         },
         formModify:{
@@ -323,7 +346,9 @@
           },
 
         ],
+        rules4blog:{
 
+        },
         noticeNumbers:0,
         visibleNewNotice:false,
         visibleModifyNotice:false,
