@@ -42,6 +42,14 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        style="margin-left: 5.5rem"
+        :current-page.sync="page4interface"
+        @current-change="interfaceChange"
+        :page-size="10"
+        layout="prev, pager, next"
+        :total="total4interface">
+      </el-pagination>
 
     </div>
   </div>
@@ -53,6 +61,9 @@
         name: "UserDetails",
       data(){
           return{
+            page4interface:1,
+            total4interface:1,
+
             account:'',
             userInfo:{
               account:'',
@@ -78,6 +89,21 @@
           }
       },
       methods:{
+          interfaceChange(){
+            let _this=this;
+            this.$axios({
+              method:'get',
+              url:'/api/getApi',
+              params:{
+                account:this.$data.account,
+                page:this.$data.page4interface
+              }
+            }).then(function (response) {
+              _this.$data.InterfaceTable=response.data.apiVos;
+              _this.$data.total4interface=response.data.all;
+              // _this.$data.page4interface=response.data.part;
+            })
+          },
           handleClick(row){
             this.$router.push({path:'/InterfaceDetails',query:{id:row.apikey}});
           },

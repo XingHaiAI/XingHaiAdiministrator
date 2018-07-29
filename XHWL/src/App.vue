@@ -22,7 +22,7 @@
       <button id="userButton">用户界面</button>
     </div>
     <!--登陆框-->
-    <div class="log" v-if="isLogin===false">
+    <!--<div class="log" v-if="isLogin===false">-->
       <el-dialog :visible.sync="checked" width="400px" title="管理员登陆" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
         <el-form :model="user"  ref="user" label-width="100px" class="demo-ruleForm" >
           <el-form-item label="用户名" prop="username" :label-width="labelWidth">
@@ -42,7 +42,7 @@
           </el-button>
         </div>
       </el-dialog>
-    </div>
+
     <router-view/>
   </div>
 
@@ -77,7 +77,8 @@
             document.cookie=keys[i]+'=0;expires=' + new Date( 0).toUTCString();
           }
         }
-        this.$data.isLogin=false;
+        // this.$data.isLogin=false;
+        this.$data.checked=true;
 
       },
       adminLogin(){
@@ -152,8 +153,10 @@
               message: '欢迎回来！管理员'
             })
             _this.$data.isLogin = true;
+            _this.$data.checked=false;
           } else {
             _this.$data.isLogin = false;
+
             document.cookie = '';
             _this.$message({
               type: 'error',

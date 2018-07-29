@@ -39,7 +39,14 @@
                 </template>
               </el-table-column>
             </el-table>
-
+            <el-pagination
+              style="margin-left: 5rem"
+              :current-page.sync="page4users"
+              @current-change="usersChange"
+              :page-size="10"
+              layout="prev, pager, next"
+              :total="total4users">
+            </el-pagination>
           </div>
         </div>
         <!--接口审核-->
@@ -76,6 +83,16 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-pagination
+              style="margin-left: 5rem"
+              :current-page.sync="page4interface"
+              @current-change="interfaceChange"
+              :page-size="10"
+              layout="prev, pager, next"
+              :total="total4interface">
+            </el-pagination>
+          </div>
+          <div>
           </div>
         </div>
       </div>
@@ -89,6 +106,10 @@
         name: "Interface",
       data () {
         return {
+          page4users:1,
+          page4interface:1,
+          total4users:1,
+          total44interface:1,
           index:1,     //菜单栏索引
           userForm:{            //用户接口表单
             createTime: '',
@@ -118,6 +139,35 @@
         }
       },
       methods:{
+        usersChange(){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/adm/getAccountList',
+            params:{
+              page:this.$data.page4users,
+              first:'2000-01-01',
+              second:'2020-01-01'
+            }
+          }).then(function (response) {
+            _this.$data.userTable=response.data.accounts
+          })
+        },
+        interfaceChange(){
+          let _this=this;
+          this.$axios({
+            method:'get',
+            url:'/adm/getApiStatus',
+            params:{
+              status:4,
+              page:this.$data.page4interface
+            }
+          }).then(function (response) {
+            _this.$data.interfaceTable=response.data.apis;
+
+
+          })
+          },
         rejectAPI(row){
           let _this=this;
           this.$axios({
@@ -183,6 +233,7 @@
             }
           }).then(function (response) {
             _this.$data.userTable=response.data.accounts
+            _this.$data.total4users=response.data.all;
           })
 
           this.$axios({
@@ -194,6 +245,7 @@
             }
           }).then(function (response) {
             _this.$data.interfaceTable=response.data.apis;
+            _this.$data.total4interface=response.data.all;
 
           })
 
