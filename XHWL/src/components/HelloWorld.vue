@@ -50,10 +50,10 @@
       <div id="leftMenu"  style="float:left">
         <label style="margin-left: 50px;font-size: 30px;">类型</label>
         <ul>
-          <span class="leftItem" style="display: block" @click="showSorts" align="center" >全部类别</span>
-          <span class="leftItem" style="display: block" @click="showUpdate" align="center">产品更新</span>
-          <span class="leftItem" style="display: block" @click="showNotice" align="center">优惠服务</span>
-          <span class="leftItem" style="display: block" @click="showSale" align="center">产品服务</span>
+          <span class="leftItem" style="display: block;text-align: left" @click="showSorts" align="center" >全部类别</span>
+          <span class="leftItem" style="display: block;text-align: left" @click="showUpdate" align="center">产品更新</span>
+          <span class="leftItem" style="display: block;text-align: left" @click="showNotice" align="center">优惠服务</span>
+          <span class="leftItem" style="display: block;text-align: left" @click="showSale" align="center">产品服务</span>
         </ul>
       </div>
       <div class="right">

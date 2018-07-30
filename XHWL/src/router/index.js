@@ -7,12 +7,17 @@ import FeedDetails from '../components/FeedBackDetails'
 import InterfaceDetails from '../components/InterfaceDetails'
 import UserDetails from '../components/UserDetails'
 import Redirect from '../components/Dedirect'
+import Blank from '../components/Blank'
 
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path:'/Blank',
+      component:Blank
+    },
     {
       path:'/UserDetails',
       component:UserDetails

@@ -37,8 +37,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="adminLogin">
-            登 陆 <i class="eell-icon-jiantouyou"/>
+          <el-button type="primary" style="font-size: 18px;" @click="adminLogin">
+            登 陆 <i style="font-size: 16px;" class="el-icon-circle-check-outline"/>
           </el-button>
         </div>
       </el-dialog>
@@ -79,6 +79,7 @@
         }
         // this.$data.isLogin=false;
         this.$data.checked=true;
+        this.$router.push({path:'/Blank'});
 
       },
       adminLogin(){

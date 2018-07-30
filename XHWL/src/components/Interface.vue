@@ -7,10 +7,10 @@
       <div class="leftMenuInter"  style="float:left">
         <label style="margin-left: 50px;font-size: 30px;">类型</label>
         <ul>
-          <button class="leftItemInter" style="display: block" @click="userInterface" align="center" v-if="!btn1Clicked">用户情况</button>
-          <button class="leftItemInterClicked" style="display: block" @click="userInterface" align="center" v-if="btn1Clicked">用户情况</button>
-          <button class="leftItemInter" style="display: block" @click="interfaceAudit" align="center" v-if="!btn2Clicked">接口审核</button>
-          <button class="leftItemInterClicked" style="display: block" @click="interfaceAudit" align="center" v-if="btn2Clicked">接口审核</button>
+          <button class="leftItemInter" style="display: block;text-align: left" @click="userInterface" align="left" v-if="!btn1Clicked">用户情况</button>
+          <button class="leftItemInterClicked" style="display: block;text-align: left" @click="userInterface" align="left" v-if="btn1Clicked">用户情况</button>
+          <button class="leftItemInter" style="display: block;text-align: left" @click="interfaceAudit" align="left" v-if="!btn2Clicked">接口审核</button>
+          <button class="leftItemInterClicked" style="display: block;text-align: left" @click="interfaceAudit" align="left" v-if="btn2Clicked">接口审核</button>
         </ul>
       </div>
       </div>
