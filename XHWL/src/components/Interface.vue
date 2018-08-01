@@ -21,11 +21,11 @@
             <el-form  ref="userForm" :model="userForm" style="margin-left: 7%;">
               <el-form-item label="创建时间 ">
                 <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择开始日期" v-model="interfaceForm.createTimeStart" style="width: 100%;"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择开始日期" v-model="userStartDate" @change="UserChangeDate1" style="width: 100%;"></el-date-picker>
                 </el-col>
                 <el-col class="line" :span="2">&emsp;——</el-col>
                 <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择结束日期" v-model="interfaceForm.createTime" style="width: 100%;"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择结束日期" v-model="userEndDate" @change="UserChangeDate2" style="width: 100%;"></el-date-picker>
                 </el-col>
               </el-form-item>
             </el-form>
@@ -55,11 +55,11 @@
             <el-form  ref="interfaceForm" :model="interfaceForm"  style="margin-left: 7%;">
               <el-form-item label="创建时间 ">
                 <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择开始日期" v-model="interfaceForm.createTimeStart" style="width: 100%;"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择开始日期" format="yyyy-mm-dd" v-model="interfaceForm.createTimeStart" style="width: 100%;"></el-date-picker>
                 </el-col>
                 <el-col class="line" :span="2">&emsp;——</el-col>
                 <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择结束日期" v-model="interfaceForm.createTime" style="width: 100%;"></el-date-picker>
+                  <el-date-picker type="date" placeholder="选择结束日期" format="yyyy-mm-dd" v-model="interfaceForm.createTime" style="width: 100%;"></el-date-picker>
                 </el-col>
               </el-form-item>
             </el-form>
@@ -110,6 +110,10 @@
           page4interface:1,
           total4users:1,
           total44interface:1,
+          userStartDate:'2001-01-01',
+          userEndDate:'2100-01-01',
+          interfaceStartDate:'2001-01-01',
+          interfaceEndDate:'2100-01-01',
           index:1,     //菜单栏索引
           userForm:{            //用户接口表单
             createTime: '',
@@ -126,7 +130,7 @@
           },
           userTable:[         //用户接口表格
           ],
-          page4interface:1,
+          // page4interface:1,
           total4interface:0,
           interfaceTable:[],//[{    //接口审核表格
             // account:'',
@@ -139,6 +143,65 @@
         }
       },
       methods:{
+        /**
+         * 安排上了
+         * @constructor
+         */
+        ChangeFormat(date){
+          let year=date.getFullYear();
+          let month=date.getMonth()+1;
+          let day=date.getDate();
+
+          if(month>'0'&&month<='9'){
+            month='0'+month;
+          }
+
+          if(day>'0'&&day<='9'){
+            day='0'+day;
+          }
+
+          date=year+'-'+month+'-'+day;
+          return date;
+
+        },
+        UserChangeDate1(){
+          let _this=this;
+
+          this.$data.userStartDate=this.ChangeFormat(this.$data.userStartDate);
+          // this.$data.userEndDate=this.ChangeFormat(this.$data.userEndDate);
+
+
+          this.$axios({
+            method:'get',
+            url:'/adm/getAccountList',
+            params:{
+              page:1,
+              first:this.$data.userStartDate,
+              second:this.$data.userEndDate,
+            }
+          }).then(function (response) {
+            _this.$data.userTable=response.data.accounts
+            console.log(_this.$data.userTable);
+          })
+        },
+        UserChangeDate2(){
+          let _this=this;
+
+          // this.$data.userStartDate=this.ChangeFormat(this.$data.userStartDate);
+          this.$data.userEndDate=this.ChangeFormat(this.$data.userEndDate);
+
+          this.$axios({
+            method:'get',
+            url:'/adm/getAccountList',
+            params:{
+              page:1,
+              first:this.$data.userStartDate,
+              second:this.$data.userEndDate,
+            }
+          }).then(function (response) {
+            _this.$data.userTable=response.data.accounts
+          })
+        },
         usersChange(){
           let _this=this;
           this.$axios({
@@ -146,8 +209,8 @@
             url:'/adm/getAccountList',
             params:{
               page:this.$data.page4users,
-              first:'2000-01-01',
-              second:'2020-01-01'
+              first:this.$data.userStartDate,
+              second:this.$data.userEndDate,
             }
           }).then(function (response) {
             _this.$data.userTable=response.data.accounts
@@ -228,8 +291,8 @@
             url:'/adm/getAccountList',
             params:{
               page:'1',
-              first:'2000-01-01',
-              second:'2020-01-01'
+              first:this.$data.userStartDate,
+              second:this.$data.userEndDate
             }
           }).then(function (response) {
             _this.$data.userTable=response.data.accounts
