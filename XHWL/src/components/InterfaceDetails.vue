@@ -136,7 +136,7 @@
           _this.$data.status=response.data.status;
           _this.$data.platform=response.data.platform;
           _this.$data.desc=response.data.descirbe;
-          for(let index=0;index<_this.$data.check;index++){
+          for(let index=0;index<_this.$data.check.length;index++){
             switch (_this.$data.check[index]){
               case 1:
                 _this.$data.check[index]='语义相似度';
