@@ -18,17 +18,44 @@
         <!--用户情况-->
         <div class="animated fadeInRight" v-if="index===1" key="2">
           <div class="interfaceBack1"   align="left" v-if="index===1">
-            <el-form  ref="userForm" :model="userForm" style="margin-left: 7%;">
-              <el-form-item label="创建时间 ">
-                <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择开始日期" v-model="userStartDate" @change="UserChangeDate1" style="width: 100%;"></el-date-picker>
+            <el-form style="margin-left: 80px;">
+              <el-form-item prop="startDate">
+                <el-col style="width: 24%">
+                  <el-date-picker
+                    v-model="userStartDate"
+                    type="date"
+                    placeholder="请选择起始日期">
+                  </el-date-picker>
                 </el-col>
-                <el-col class="line" :span="2">&emsp;——</el-col>
-                <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择结束日期" v-model="userEndDate" @change="UserChangeDate2" style="width: 100%;"></el-date-picker>
+                <el-col style="width: 24%">
+                  <el-date-picker
+                    v-model="userEndDate"
+                    type="date"
+                    placeholder="请选择结束日期">
+                  </el-date-picker>
+                </el-col>
+                <el-col style="width: 24%">
+                  <el-input v-model="accountSearchName" placeholder="请输入用户名"></el-input>
+                </el-col>
+                <el-col style="width: 10%;margin-left: 30px;">
+                  <el-button @click="searchAccountByConditions">搜索</el-button>
                 </el-col>
               </el-form-item>
             </el-form>
+            <!--<el-form  ref="userForm" :model="userForm" style="margin-left: 7%;">-->
+              <!--<el-form-item label="创建时间 ">-->
+                <!--<el-col :span="5">-->
+                  <!--<el-date-picker type="date" placeholder="选择开始日期" v-model="userStartDate" @change="UserChangeDate1" style="width: 100%;"></el-date-picker>-->
+                <!--</el-col>-->
+                <!--<el-col class="line" :span="2">&emsp;——</el-col>-->
+                <!--<el-col :span="5">-->
+                  <!--<el-date-picker type="date" placeholder="选择结束日期" v-model="userEndDate" @change="UserChangeDate2" style="width: 100%;"></el-date-picker>-->
+                <!--</el-col><br/>-->
+                <!--<el-form-item label="用户姓名" style="text-align: left">-->
+                  <!--<el-input v-model="accountSearchName" placeholder="请输入用户名"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-form-item>-->
+            <!--</el-form>-->
             <el-table :data="userTable" height="500px" class="intTable1">
               <el-table-column prop="account" label="用户名" width="200" align="center"></el-table-column>
               <el-table-column prop="time" label="用户创建时间" width="240" align="center"></el-table-column>
@@ -52,17 +79,34 @@
         <!--接口审核-->
         <div class="animated fadeInRight" v-if="index===2" key="1">
           <div class="interfaceBack"   align="left" v-if="index===2">
-            <el-form  ref="interfaceForm" :model="interfaceForm"  style="margin-left: 7%;">
-              <el-form-item label="创建时间 ">
-                <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择开始日期" format="yyyy-mm-dd" v-model="interfaceForm.createTimeStart" style="width: 100%;"></el-date-picker>
-                </el-col>
-                <el-col class="line" :span="2">&emsp;——</el-col>
-                <el-col :span="5">
-                  <el-date-picker type="date" placeholder="选择结束日期" format="yyyy-mm-dd" v-model="interfaceForm.createTime" style="width: 100%;"></el-date-picker>
-                </el-col>
-              </el-form-item>
-            </el-form>
+            <div class="searchInterface" style="margin-left: 80px;">
+              <el-form :model="searchInterface" :rules="rulesSearchInterface" ref="searchInterface">
+                <el-form-item prop="startDate">
+                  <el-col style="width: 24%">
+                  <el-date-picker
+                    v-model="searchInterface.startDate"
+                    type="date"
+                    placeholder="请选择起始日期">
+                  </el-date-picker>
+                  </el-col>
+                  <el-col style="width: 24%">
+                  <el-date-picker
+                    v-model="searchInterface.endDate"
+                    type="date"
+                    placeholder="请选择结束日期">
+                  </el-date-picker>
+                  </el-col>
+                  <el-col style="width: 24%">
+                  <el-input v-model="searchInterface.searchName"></el-input>
+                  </el-col>
+                  <el-col style="width: 10%;margin-left: 30px;">
+                    <el-button>搜索</el-button>
+                  </el-col>
+                </el-form-item>
+              </el-form>
+
+
+            </div>
 
             <el-table :data="interfaceTable" height="500px"  class="intTable">
               <el-table-column prop="account" label="用户名" width="180" align="center"></el-table-column>
@@ -106,12 +150,33 @@
         name: "Interface",
       data () {
         return {
+          searchInterface:{
+            startDate:'',
+            endDate:'',
+            searchName:''
+          },
+          rulesSearchInterface:{
+
+          },
           page4users:1,
           page4interface:1,
           total4users:1,
           total44interface:1,
-          userStartDate:'2001-01-01',
-          userEndDate:'2100-01-01',
+          /**
+           * 用户搜索条件
+           * */
+          accountSearchName:'',
+          userStartDate:'',
+          userEndDate:'',
+          formSearchAccount:{
+            first:'2000-01-01',
+            second:'2100-01-01',
+            partName:'',
+            page:1
+          },
+          /**
+           * API搜索条件
+           * */
           interfaceStartDate:'2001-01-01',
           interfaceEndDate:'2100-01-01',
           index:1,     //菜单栏索引
@@ -140,9 +205,53 @@
           //}],
           btn1Clicked:false,   //按钮是否点击
           btn2Clicked:false,
+
         }
       },
       methods:{
+          /**
+           * 根据条件搜索用户
+           *
+           * */
+          searchAccountByConditions(){
+            //变换日期格式
+
+            let startDate=this.ChangeFormat(this.$data.userStartDate);
+            let endDate=this.ChangeFormat(this.$data.userEndDate);
+
+            // this.$data.userStartDate=this.ChangeFormat(this.$data.userStartDate);
+            // this.$data.userEndDate=this.ChangeFormat(this.$data.userEndDate);
+
+            let flag=true;
+
+
+            if(startDate>endDate){
+              flag=false;
+              this.$message({
+                type:'error',
+                message:'起始日期不能晚于结束日期'
+              })
+            }
+
+            if(flag===true) {
+              //先把搜索框绑定的条件赋值给formSearchAccount
+              this.$data.formSearchAccount.first = startDate;
+              this.$data.formSearchAccount.second = endDate;
+              this.$data.formSearchAccount.partName = this.$data.accountSearchName
+
+              //然后利用formSearchAccount作为条件传给后端
+              let _this = this;
+              this.$axios({
+                method: 'get',
+                url: '/adm/searchAccount',
+                params: this.$data.formSearchAccount
+              }).then(function (response) {
+                _this.$data.userTable = response.data.accounts
+                _this.$data.total4users = response.data.all;
+              })
+            }
+          },
+
         /**
          * 安排上了
          * @constructor
@@ -164,44 +273,44 @@
           return date;
 
         },
-        UserChangeDate1(){
-          let _this=this;
-
-          this.$data.userStartDate=this.ChangeFormat(this.$data.userStartDate);
-          // this.$data.userEndDate=this.ChangeFormat(this.$data.userEndDate);
-
-
-          this.$axios({
-            method:'get',
-            url:'/adm/getAccountList',
-            params:{
-              page:1,
-              first:this.$data.userStartDate,
-              second:this.$data.userEndDate,
-            }
-          }).then(function (response) {
-            _this.$data.userTable=response.data.accounts
-            console.log(_this.$data.userTable);
-          })
-        },
-        UserChangeDate2(){
-          let _this=this;
-
-          // this.$data.userStartDate=this.ChangeFormat(this.$data.userStartDate);
-          this.$data.userEndDate=this.ChangeFormat(this.$data.userEndDate);
-
-          this.$axios({
-            method:'get',
-            url:'/adm/getAccountList',
-            params:{
-              page:1,
-              first:this.$data.userStartDate,
-              second:this.$data.userEndDate,
-            }
-          }).then(function (response) {
-            _this.$data.userTable=response.data.accounts
-          })
-        },
+        // UserChangeDate1(){
+        //   let _this=this;
+        //
+        //   this.$data.userStartDate=this.ChangeFormat(this.$data.userStartDate);
+        //   // this.$data.userEndDate=this.ChangeFormat(this.$data.userEndDate);
+        //
+        //
+        //   this.$axios({
+        //     method:'get',
+        //     url:'/adm/getAccountList',
+        //     params:{
+        //       page:1,
+        //       first:this.$data.userStartDate,
+        //       second:this.$data.userEndDate,
+        //     }
+        //   }).then(function (response) {
+        //     _this.$data.userTable=response.data.accounts
+        //     console.log(_this.$data.userTable);
+        //   })
+        // },
+        // UserChangeDate2(){
+        //   let _this=this;
+        //
+        //   // this.$data.userStartDate=this.ChangeFormat(this.$data.userStartDate);
+        //   this.$data.userEndDate=this.ChangeFormat(this.$data.userEndDate);
+        //
+        //   this.$axios({
+        //     method:'get',
+        //     url:'/adm/getAccountList',
+        //     params:{
+        //       page:1,
+        //       first:this.$data.userStartDate,
+        //       second:this.$data.userEndDate,
+        //     }
+        //   }).then(function (response) {
+        //     _this.$data.userTable=response.data.accounts
+        //   })
+        // },
         usersChange(){
           let _this=this;
           this.$axios({
@@ -209,8 +318,9 @@
             url:'/adm/getAccountList',
             params:{
               page:this.$data.page4users,
-              first:this.$data.userStartDate,
-              second:this.$data.userEndDate,
+              first:this.$data.formSearchAccount.first,
+              second:this.$data.formSearchAccount.second,
+              partName:this.$data.formSearchAccount.partName
             }
           }).then(function (response) {
             _this.$data.userTable=response.data.accounts
@@ -288,11 +398,12 @@
           let _this=this;
           this.$axios({
             method:'get',
-            url:'/adm/getAccountList',
+            url:'/adm/searchAccount',
             params:{
-              page:'1',
-              first:this.$data.userStartDate,
-              second:this.$data.userEndDate
+              page:1,
+              first:'2001-01-01',
+              second:'2100-01-01',
+              partName:this.$data.accountSearchName
             }
           }).then(function (response) {
             _this.$data.userTable=response.data.accounts
@@ -301,9 +412,9 @@
 
           this.$axios({
             method:'get',
-            url:'/adm/getApiStatus',
+            url:'/adm/searchApi',
             params:{
-              status:4,
+              partName:'测试',
               page:1
             }
           }).then(function (response) {
