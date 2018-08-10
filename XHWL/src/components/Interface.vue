@@ -80,27 +80,13 @@
         <div class="animated fadeInRight" v-if="index===2" key="1">
           <div class="interfaceBack"   align="left" v-if="index===2">
             <div class="searchInterface" style="margin-left: 80px;">
-              <el-form :model="searchInterface" :rules="rulesSearchInterface" ref="searchInterface">
+              <el-form>
                 <el-form-item prop="startDate">
                   <el-col style="width: 24%">
-                  <el-date-picker
-                    v-model="searchInterface.startDate"
-                    type="date"
-                    placeholder="请选择起始日期">
-                  </el-date-picker>
-                  </el-col>
-                  <el-col style="width: 24%">
-                  <el-date-picker
-                    v-model="searchInterface.endDate"
-                    type="date"
-                    placeholder="请选择结束日期">
-                  </el-date-picker>
-                  </el-col>
-                  <el-col style="width: 24%">
-                  <el-input v-model="searchInterface.searchName"></el-input>
+                  <el-input v-model="searchApiName" placeholder="请输入API名"></el-input>
                   </el-col>
                   <el-col style="width: 10%;margin-left: 30px;">
-                    <el-button>搜索</el-button>
+                    <el-button @click="searchApiByName">搜索</el-button>
                   </el-col>
                 </el-form-item>
               </el-form>
@@ -150,14 +136,10 @@
         name: "Interface",
       data () {
         return {
-          searchInterface:{
-            startDate:'',
-            endDate:'',
-            searchName:''
-          },
           rulesSearchInterface:{
 
           },
+
           page4users:1,
           page4interface:1,
           total4users:1,
@@ -177,8 +159,8 @@
           /**
            * API搜索条件
            * */
-          interfaceStartDate:'2001-01-01',
-          interfaceEndDate:'2100-01-01',
+          searchApiName:'',
+          useSearchApiName:'',
           index:1,     //菜单栏索引
           userForm:{            //用户接口表单
             createTime: '',
@@ -209,6 +191,33 @@
         }
       },
       methods:{
+
+
+          /**
+           *
+           * 根据条件搜索API
+           *
+           * */
+          searchApiByName(){
+            this.$data.useSearchApiName=this.$data.searchApiName;
+
+            let _this=this;
+
+            this.$axios({
+              method:'get',
+              url:'/adm/searchApi',
+              params:{
+                partName:this.$data.useSearchApiName,
+                page:1
+              }
+            }).then(function (response) {
+              _this.$data.interfaceTable=response.data.apis;
+              _this.$data.total4interface=response.data.all;
+            })
+
+          },
+
+
           /**
            * 根据条件搜索用户
            *
@@ -330,14 +339,13 @@
           let _this=this;
           this.$axios({
             method:'get',
-            url:'/adm/getApiStatus',
+            url:'/adm/searchApi',
             params:{
-              status:4,
+              partName:this.$data.useSearchApiName,
               page:this.$data.page4interface
             }
           }).then(function (response) {
             _this.$data.interfaceTable=response.data.apis;
-
 
           })
           },
@@ -414,7 +422,7 @@
             method:'get',
             url:'/adm/searchApi',
             params:{
-              partName:'测试',
+              partName:'',
               page:1
             }
           }).then(function (response) {
